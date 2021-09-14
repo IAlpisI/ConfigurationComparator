@@ -24,6 +24,16 @@ namespace ConfigurationComparator
                 Console.WriteLine($"{v.Char} {v.Count}");
             }
         }
+
+        public void Filter(IEnumerable<Comparision> comp, string Id, List<Status> filters)
+        {
+            var values = comp.Where(x => filters.Contains(x.Status) && x.Id.Contains(Id));
+
+            foreach(var v in values)
+            {
+                Console.WriteLine(v);
+            }
+        }
     }
 
     public enum Status
