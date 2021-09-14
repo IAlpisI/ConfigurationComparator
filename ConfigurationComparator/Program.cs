@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace ConfigurationComparator
 {
@@ -7,10 +6,11 @@ namespace ConfigurationComparator
     {
         static void Main(string[] args)
         {
-            var temp = new FileReader();
+            var file = new FileReader();
+            var temp = new Comparision();
 
-            var sourceData = temp.Read(Constant.SourceFilePath);
-            var targetData = temp.Read(Constant.TargetFilePath);
+            var sourceData = file.Read(Constant.SourceFilePath);
+            var targetData = file.Read(Constant.TargetFilePath);
 
             foreach(var s in sourceData)
             {
@@ -29,6 +29,8 @@ namespace ConfigurationComparator
             {
                 Console.WriteLine(d.ToString());
             }
+
+            temp.PrintReport(data);
         }
     }
 }

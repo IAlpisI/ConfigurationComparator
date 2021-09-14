@@ -1,4 +1,8 @@
-﻿namespace ConfigurationComparator
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConfigurationComparator
 {
     public class Comparision
     {
@@ -10,6 +14,16 @@
         public void SetStatus(Status status) => Status = status;
         public void SetTarget(string target) => Target = target;
         public override string ToString() => $"{Id} {Source} {Target} {Status}";
+
+        public void PrintReport(IEnumerable<Comparision> comp)
+        {
+            var values = comp.GroupBy(x => x.Status).Select(c => new { Char=c.Key, Count=c.Count() });
+
+            foreach(var v in values)
+            {
+                Console.WriteLine($"{v.Char} {v.Count}");
+            }
+        }
     }
 
     public enum Status
