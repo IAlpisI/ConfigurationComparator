@@ -7,14 +7,18 @@ namespace ConfigurationComparator
     {
         static void Main(string[] args)
         {
-            var status = new List<Status>() { Status.Added, Status.Modified, Status.Removed, Status.Unchanged };
-            var id = "700077";
+            //var status = new List<Status>() { Status.Added, Status.Modified, Status.Removed, Status.Unchanged };
+            //var id = "700077";
 
-            var file = new FileReader();
-            var comp = new Comparision();
+            //var file = new ConfiguratorReader();
+            //var comp = new Comparision();
 
-            var sourceData = file.Read(Constant.SourceFilePath);
-            var targetData = file.Read(Constant.TargetFilePath);
+            var main = new Main();
+            main.Run();
+
+            //var sourceData = file.Read(Constant.SourceFilePath);
+            //var targetData = file.Read(Constant.TargetFilePath);
+            //var test = file.Read("../../../Data/FMB001-default.cfg");
 
             //foreach(var s in sourceData)
             //{
@@ -26,11 +30,11 @@ namespace ConfigurationComparator
             //    Console.WriteLine(s.Key + " " + s.Value);
             //}
 
-            var comparator = new Comparator();
-            var data = comparator.Compare(sourceData, targetData);
+            //var comparator = new Comparator();
+            //var data = Comparator.Compare(sourceData, targetData);
 
-            comp.PrintReport(data);
-            comp.Filter(data, id, status);
+            //Comparision.PrintReport(data);
+            //Comparision.Filter(data, id, status);
         }
     }
 }

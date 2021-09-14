@@ -4,9 +4,9 @@ using System.IO;
 
 namespace ConfigurationComparator
 {
-    class FileReader
+    class ConfiguratorReader
     {
-        public Dictionary<string, string> Read(string path)
+        public static Dictionary<string, string> Read(string path)
         {
             var lines = File.ReadAllLines(path);
             var result = new Dictionary<string, string>();

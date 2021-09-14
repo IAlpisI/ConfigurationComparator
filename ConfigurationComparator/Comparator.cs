@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ConfigurationComparator
 {
     public class Comparator
     {
-        public IEnumerable<Comparision> Compare(Dictionary<string, string> source, Dictionary<string, string> target)
+        public static IEnumerable<Comparision> Compare(Dictionary<string, string> source, Dictionary<string, string> target)
         {
             var result = new List<Comparision>();
 
@@ -17,11 +13,12 @@ namespace ConfigurationComparator
                 var sourceKey = s.Key;
                 var sourceValue = s.Value;
 
-                var comp = new Comparision()
+                if(!int.TryParse(sourceKey, out _))
                 {
-                    Id = sourceKey,
-                    Source = sourceValue,
-                };
+                    continue;
+                }
+
+                var comp = new Comparision(sourceKey, sourceValue);
 
                 if (target.ContainsKey(sourceKey))
                 {
@@ -47,12 +44,13 @@ namespace ConfigurationComparator
             foreach(var t in target)
             {
                 var targetKey = t.Key;
-                var comp = new Comparision()
+
+                if (!int.TryParse(targetKey, out _))
                 {
-                    Id = targetKey,
-                    Source = t.Value,
-                    Target = target[targetKey],
-                };
+                    continue;
+                }
+
+                var comp = new Comparision(targetKey, t.Value, target[targetKey]);
 
                 if(!source.ContainsKey(targetKey))
                 {
