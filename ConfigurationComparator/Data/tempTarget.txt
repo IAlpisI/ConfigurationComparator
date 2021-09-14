@@ -4,3 +4,5 @@ Title:CFG for FW 03.25.14.Rev.00++;
 MinConfiguratorVersion:0.9.0.0;
 FmType:FMB920;
 1:;
+2:20;
+60:555;

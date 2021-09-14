@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConfigurationComparator
 {
     class FileReader
     {
-        public IDictionary<string, string> Read(string path)
+        public Dictionary<string, string> Read(string path)
         {
             var lines = File.ReadAllLines(path);
             var result = new Dictionary<string, string>();
