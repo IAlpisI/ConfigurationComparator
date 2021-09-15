@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace ConfigurationComparator
 {
@@ -19,8 +18,8 @@ namespace ConfigurationComparator
             LookForFile("Source");
             LookForFile("Target");
 
-            var sourceData = ConfiguratorReader.Read(Constant.SourceFilePath);
-            var targetData = ConfiguratorReader.Read(Constant.TargetFilePath);
+            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(SourceFilePath));
+            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(TargetFilePath));
             Data = Comparator.Compare(sourceData, targetData);
 
             PrintData();
@@ -78,7 +77,7 @@ namespace ConfigurationComparator
                 Console.WriteLine($"Write the {FileType} file name in the data folder");
                 var filePath = Console.ReadLine();
 
-                if (File.Exists(Constant.defaultPath + filePath))
+                if (File.Exists(Constant.defaultPath + filePath) && filePath[^4..].Equals(".cfg"))
                 {
                     switch (FileType)
                     {

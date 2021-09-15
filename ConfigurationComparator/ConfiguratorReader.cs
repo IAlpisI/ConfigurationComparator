@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 
 namespace ConfigurationComparator
 {
@@ -8,10 +9,9 @@ namespace ConfigurationComparator
     {
         public static Dictionary<string, string> Read(string path)
         {
-            var lines = File.ReadAllLines(path);
-            var result = new Dictionary<string, string>();
+            var data = new Dictionary<string, string>();
 
-            foreach (var line in lines)
+            foreach (var line in File.ReadAllLines(path))
             {
                 var parameters = line.Split(';', StringSplitOptions.RemoveEmptyEntries);
 
@@ -20,15 +20,37 @@ namespace ConfigurationComparator
                     var temp = p.Split(':');
                     if (temp.Length == 2)
                     {
-                        result.Add(temp[0], temp[1]);
-                    } else
+                        data.Add(temp[0], temp[1]);
+                    }
+                    else
                     {
-                        result.Add(temp[0], string.Empty);
+                        data.Add(temp[0], string.Empty);
                     }
                 }
             }
 
-            return result;
+            return data;
+        }
+
+        public static string Decompose(string path)
+        {
+            var newFile = path[..^4];
+
+            try
+            {
+                using (FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    using FileStream outputStream = new(newFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
+                    gzip.CopyTo(outputStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while trying to open file "+ex);
+            }
+
+            return newFile;
         }
     }
 }
