@@ -38,16 +38,14 @@ namespace ConfigurationComparator
 
             try
             {
-                using (FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                {
-                    using FileStream outputStream = new(newFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                    using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
-                    gzip.CopyTo(outputStream);
-                }
+                using FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using FileStream outputStream = new(newFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
+                gzip.CopyTo(outputStream);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while trying to open file "+ex);
+                Console.WriteLine($"An error occurred while trying to open the file "+ex);
             }
 
             return newFile;

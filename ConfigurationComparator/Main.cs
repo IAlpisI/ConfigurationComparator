@@ -15,11 +15,14 @@ namespace ConfigurationComparator
         {
             bool run = true;
 
-            LookForFile("Source");
-            LookForFile("Target");
+            LookForFile(Constant.SourceFile);
+            LookForFile(Constant.TargetFile);
 
             var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(SourceFilePath));
             var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(TargetFilePath));
+
+            Console.WriteLine(sourceData.Count);
+
             Data = Comparator.Compare(sourceData, targetData);
 
             PrintData();
@@ -53,13 +56,14 @@ namespace ConfigurationComparator
         public void FilterData()
         {
             List<Status> filter = new();
+            int filterNumber = 4;
 
             Console.WriteLine("Write id");
             var id = Console.ReadLine();
             Console.WriteLine("Select filters \n0 - Added \n1 - Modified \n2 - Removed \n3 - Unchanged ");
             var filters = Console.ReadLine();
 
-            for(int x=0;x<4;x++)
+            for(int x=0;x<filterNumber;x++)
             {
                 if (filters.Contains(x.ToString()))
                 {
@@ -75,16 +79,17 @@ namespace ConfigurationComparator
             while(true)
             {
                 Console.WriteLine($"Write the {FileType} file name in the data folder");
-                var filePath = Console.ReadLine();
+                var file = Console.ReadLine();
+                var filePath = Constant.defaultPath + file;
 
-                if (File.Exists(Constant.defaultPath + filePath) && filePath[^4..].Equals(".cfg"))
+                if (File.Exists(filePath) && file[^4..].Equals(Constant.CFGFileExtension))
                 {
                     switch (FileType)
                     {
-                        case "Source":
+                        case Constant.SourceFile:
                             SourceFilePath = filePath;
                             break;
-                        case "Target":
+                        case Constant.TargetFile:
                             TargetFilePath = filePath;
                             break;
                         default:
