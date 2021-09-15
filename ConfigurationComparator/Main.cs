@@ -10,26 +10,25 @@ namespace ConfigurationComparator
         private string TargetFilePath { get; set; }
         private readonly List<Status> Statuses = new() { Status.Added, Status.Modified, Status.Removed, Status.Unchanged };
         private IEnumerable<Comparision> Data { get; set; }
+        private const string TargetFile = "Target";
+        private const string SourceFile = "Source";
 
         public void Run()
         {
             bool run = true;
 
-            LookForFile(Constant.SourceFile);
-            LookForFile(Constant.TargetFile);
+            LookForFile(SourceFile);
+            LookForFile(TargetFile);
 
             var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(SourceFilePath));
             var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(TargetFilePath));
 
-            Console.WriteLine(sourceData.Count);
-
             Data = Comparator.Compare(sourceData, targetData);
-
             PrintData();
 
             while (run)
             {
-                Console.WriteLine("F to filter \nW to view files \nQ to finish \nR to view report");
+                Console.WriteLine("F to filter \nW to view the files \nQ to finish \nR to view report");
                 var command = Console.ReadLine();
 
                 switch (command)
@@ -38,7 +37,7 @@ namespace ConfigurationComparator
                         FilterData();
                         break;
                     case "W":
-                        Console.WriteLine($"Source file - {SourceFilePath} \n Target file - {TargetFilePath}");
+                        Console.WriteLine($"Source file - {SourceFilePath} \nTarget file - {TargetFilePath}");
                         break;
                     case "Q":
                         run = false;
@@ -86,10 +85,10 @@ namespace ConfigurationComparator
                 {
                     switch (FileType)
                     {
-                        case Constant.SourceFile:
+                        case SourceFile:
                             SourceFilePath = filePath;
                             break;
-                        case Constant.TargetFile:
+                        case TargetFile:
                             TargetFilePath = filePath;
                             break;
                         default:

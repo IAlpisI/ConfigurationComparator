@@ -33,24 +33,23 @@ namespace ConfigurationComparator
                     }
                     result.Add(comp);
                     continue;
-                } else
-                {
-                    comp.SetStatus(Status.Removed);
+                } 
 
-                    result.Add(comp);
-                }
+                comp.SetStatus(Status.Removed);
+                result.Add(comp);
             }
 
             foreach(var t in target)
             {
                 var targetKey = t.Key;
+                var targetValue = t.Value;
 
                 if (!int.TryParse(targetKey, out _))
                 {
                     continue;
                 }
 
-                var comp = new Comparision(targetKey, t.Value, target[targetKey]);
+                var comp = new Comparision(targetKey, targetValue, target[targetKey]);
 
                 if(!source.ContainsKey(targetKey))
                 {
