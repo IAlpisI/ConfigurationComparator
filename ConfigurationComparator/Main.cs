@@ -8,8 +8,8 @@ namespace ConfigurationComparator
     {
         private string SourceFilePath { get; set; }
         private string TargetFilePath { get; set; }
+
         private readonly List<Status> Statuses = new() { Status.Added, Status.Modified, Status.Removed, Status.Unchanged };
-        private IEnumerable<Comparision> Data { get; set; }
         private const string TargetFile = "Target";
         private const string SourceFile = "Source";
 
@@ -23,18 +23,20 @@ namespace ConfigurationComparator
             var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(SourceFilePath));
             var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(TargetFilePath));
 
-            Data = Comparator.Compare(sourceData, targetData);
-            PrintData();
+            var (Compared, Sustained) = Comparator.Compare(sourceData, targetData);
 
             while (run)
             {
-                Console.WriteLine("F to filter \nW to view the files \nQ to finish \nR to view report");
+                Console.WriteLine("F to filter \nW to view the files \nQ to finish " +
+                    "\nR to view report \nG to view records with string type ids " +
+                    "\nV to view records with int type ids");
+
                 var command = Console.ReadLine();
 
                 switch (command)
                 {
                     case "F":
-                        FilterData();
+                        FilterData(Compared);
                         break;
                     case "W":
                         Console.WriteLine($"Source file - {SourceFilePath} \nTarget file - {TargetFilePath}");
@@ -43,7 +45,13 @@ namespace ConfigurationComparator
                         run = false;
                         break;
                     case "R":
-                        Comparision.PrintReport(Data);
+                        Comparison.PrintReport(Compared);
+                        break;
+                    case "V":
+                        Print(Compared);
+                        break;
+                    case "G":
+                        Print(Sustained);
                         break;
                     default:
                         break;
@@ -52,7 +60,7 @@ namespace ConfigurationComparator
             }
         }
 
-        public void FilterData()
+        private void FilterData(IEnumerable<Comparison> Data)
         {
             List<Status> filter = new();
             int filterNumber = 4;
@@ -70,10 +78,10 @@ namespace ConfigurationComparator
                 }
             }
 
-            Comparision.Filter(Data, id, filter);
+            Comparison.Filter(Data, id, filter);
         }
 
-        public void LookForFile(string FileType)
+        private void LookForFile(string FileType)
         {
             while(true)
             {
@@ -100,11 +108,11 @@ namespace ConfigurationComparator
             }
         }
 
-        public void PrintData()
+        private static void Print<T>(IEnumerable<T> data)
         {
-            foreach (var d in Data)
+            foreach(var d in data)
             {
-                Console.WriteLine(d.ToString());
+                Console.WriteLine(d);
             }
             Console.WriteLine();
         }

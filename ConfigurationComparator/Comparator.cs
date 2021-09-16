@@ -1,62 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ConfigurationComparator
 {
     public class Comparator
     {
-        public static IEnumerable<Comparision> Compare(Dictionary<string, string> source, Dictionary<string, string> target)
+        public static (IEnumerable<Comparison>, IEnumerable<SingleValue>) Compare(Dictionary<string, string> source, Dictionary<string, string> target)
         {
-            var data = new List<Comparision>();
+            var dataWithIntTypeIds = new List<Comparison>();
+            var dataWithStringTypeIds = new List<SingleValue>();
 
             foreach(var s in source)
             {
-                var sourceKey = s.Key;
-                var sourceValue = s.Value;
-
-                if(!int.TryParse(sourceKey, out _))
+                if(!int.TryParse(s.Key, out _))
                 {
+                    dataWithStringTypeIds.Add(new SingleValue(s.Key, s.Value));
                     continue;
                 }
 
-                var comp = new Comparision(sourceKey, sourceValue);
+                var comp = new Comparison(s.Key, s.Value);
 
-                if (target.ContainsKey(sourceKey))
+                if (target.ContainsKey(s.Key))
                 {
-                    var status = sourceValue == target[sourceKey] ? Status.Unchanged : Status.Modified;
+                    var status = s.Value == target[s.Key] ? Status.Unchanged : Status.Modified;
 
-                    comp.SetTarget(target[sourceKey]);
+                    comp.SetTarget(target[s.Key]);
                     comp.SetStatus(status);
-                    data.Add(comp);
+                    dataWithIntTypeIds.Add(comp);
 
                     continue;
                 }
 
                 comp.SetStatus(Status.Removed);
-                data.Add(comp);
+                dataWithIntTypeIds.Add(comp);
             }
 
             foreach(var t in target)
             {
-                var targetKey = t.Key;
-                var targetValue = t.Value;
-
-                if (!int.TryParse(targetKey, out _))
+                if (!int.TryParse(t.Key, out _))
                 {
+                    dataWithStringTypeIds.Add(new SingleValue(t.Key, t.Value));
                     continue;
                 }
 
-                var comp = new Comparision(targetKey, targetValue, target[targetKey]);
+                var comp = new Comparison(t.Key, t.Value, target[t.Key]);
 
-                if(!source.ContainsKey(targetKey))
+                if(!source.ContainsKey(t.Key))
                 {
                     comp.SetStatus(Status.Added);
-                    data.Add(comp);
+                    dataWithIntTypeIds.Add(comp);
                 }
             }
 
-            return data;
+            return (dataWithIntTypeIds, dataWithStringTypeIds);
         }
-
     }
 }
