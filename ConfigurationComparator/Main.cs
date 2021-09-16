@@ -79,7 +79,7 @@ namespace ConfigurationComparator
             {
                 Console.WriteLine($"Write the {FileType} file name in the data folder");
                 var file = Console.ReadLine();
-                var filePath = Constant.defaultPath + file;
+                var filePath = Constant.DefaultPath + file;
 
                 if (File.Exists(filePath) && file[^4..].Equals(Constant.CFGFileExtension))
                 {

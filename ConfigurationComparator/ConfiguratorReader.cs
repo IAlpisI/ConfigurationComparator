@@ -18,14 +18,8 @@ namespace ConfigurationComparator
                 foreach (var p in parameters)
                 {
                     var temp = p.Split(':');
-                    if (temp.Length == 2)
-                    {
-                        data.Add(temp[0], temp[1]);
-                    }
-                    else
-                    {
-                        data.Add(temp[0], string.Empty);
-                    }
+                    var values = temp.Length == 2 ? (temp[0], temp[1]) : (temp[0], string.Empty);
+                    data.Add(values.Item1, values.Item2);
                 }
             }
 
@@ -34,21 +28,21 @@ namespace ConfigurationComparator
 
         public static string Decompose(string path)
         {
-            var newFile = path[..^4];
+            var newFileName = path[..^4]; 
 
             try
             {
                 using FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                using FileStream outputStream = new(newFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using FileStream outputStream = new(newFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
                 gzip.CopyTo(outputStream);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while trying to open the file "+ex);
+                Console.WriteLine($"An error occurred while trying to open the file "+ex.Message);
             }
 
-            return newFile;
+            return newFileName;
         }
     }
 }

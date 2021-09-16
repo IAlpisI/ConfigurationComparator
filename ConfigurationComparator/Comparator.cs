@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ConfigurationComparator
 {
@@ -6,7 +7,7 @@ namespace ConfigurationComparator
     {
         public static IEnumerable<Comparision> Compare(Dictionary<string, string> source, Dictionary<string, string> target)
         {
-            var result = new List<Comparision>();
+            var data = new List<Comparision>();
 
             foreach(var s in source)
             {
@@ -22,21 +23,17 @@ namespace ConfigurationComparator
 
                 if (target.ContainsKey(sourceKey))
                 {
-                    comp.SetTarget(target[sourceKey]);
+                    var status = sourceValue == target[sourceKey] ? Status.Unchanged : Status.Modified;
 
-                    if(sourceValue == target[sourceKey])
-                    {
-                        comp.SetStatus(Status.Unchanged);
-                    } else
-                    {
-                        comp.SetStatus(Status.Modified);
-                    }
-                    result.Add(comp);
+                    comp.SetTarget(target[sourceKey]);
+                    comp.SetStatus(status);
+                    data.Add(comp);
+
                     continue;
-                } 
+                }
 
                 comp.SetStatus(Status.Removed);
-                result.Add(comp);
+                data.Add(comp);
             }
 
             foreach(var t in target)
@@ -54,11 +51,12 @@ namespace ConfigurationComparator
                 if(!source.ContainsKey(targetKey))
                 {
                     comp.SetStatus(Status.Added);
-                    result.Add(comp);
+                    data.Add(comp);
                 }
             }
 
-            return result;
+            return data;
         }
+
     }
 }

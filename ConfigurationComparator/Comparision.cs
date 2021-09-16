@@ -20,21 +20,21 @@ namespace ConfigurationComparator
 
         public static void PrintReport(IEnumerable<Comparision> comp)
         {
-            var values = comp.GroupBy(x => x.Status).Select(c => new { Char=c.Key, Count=c.Count() });
+            var report = comp.GroupBy(x => x.Status).Select(c => new { Char=c.Key, Count=c.Count() });
 
-            foreach(var v in values)
+            foreach(var r in report)
             {
-                Console.WriteLine($"{v.Char} {v.Count}");
+                Console.WriteLine($"{r.Char} {r.Count}");
             }
         }
 
         public static void Filter(IEnumerable<Comparision> comp, string Id, List<Status> filters)
         {
-            var values = comp.Where(x => filters.Contains(x.Status) && x.Id.Contains(Id));
+            var filteredData = comp.Where(x => filters.Contains(x.Status) && x.Id.Contains(Id));
 
-            foreach(var v in values)
+            foreach(var fd in filteredData)
             {
-                Console.WriteLine(v);
+                Console.WriteLine(fd);
             }
         }
     }
