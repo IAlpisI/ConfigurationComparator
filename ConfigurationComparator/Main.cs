@@ -1,4 +1,4 @@
-﻿using System;
+﻿using static System.Console;
 using System.Collections.Generic;
 using System.IO;
 
@@ -27,11 +27,11 @@ namespace ConfigurationComparator
 
             while (run)
             {
-                Console.WriteLine("F to filter \nW to view the files \nQ to finish " +
+                WriteLine("F to filter \nW to view the files \nQ to finish " +
                     "\nR to view report \nG to view records with string type ids " +
                     "\nV to view records with int type ids");
 
-                var command = Console.ReadLine();
+                var command = ReadLine();
 
                 switch (command)
                 {
@@ -39,7 +39,7 @@ namespace ConfigurationComparator
                         FilterData(Compared);
                         break;
                     case "W":
-                        Console.WriteLine($"Source file - {SourceFilePath} \nTarget file - {TargetFilePath}");
+                        WriteLine($"Source file - {SourceFilePath} \nTarget file - {TargetFilePath}");
                         break;
                     case "Q":
                         run = false;
@@ -56,7 +56,7 @@ namespace ConfigurationComparator
                     default:
                         break;
                 }
-                Console.WriteLine();
+                WriteLine();
             }
         }
 
@@ -65,10 +65,10 @@ namespace ConfigurationComparator
             List<Status> filter = new();
             int filterNumber = 4;
 
-            Console.WriteLine("Write id");
-            var id = Console.ReadLine();
-            Console.WriteLine("Select filters \n0 - Added \n1 - Modified \n2 - Removed \n3 - Unchanged ");
-            var filters = Console.ReadLine();
+            WriteLine("Write id");
+            var id = ReadLine();
+            WriteLine("Select filters \n0 - Added \n1 - Modified \n2 - Removed \n3 - Unchanged ");
+            var filters = ReadLine();
 
             for(int x=0;x<filterNumber;x++)
             {
@@ -85,8 +85,8 @@ namespace ConfigurationComparator
         {
             while(true)
             {
-                Console.WriteLine($"Write the {FileType} file name in the data folder");
-                var file = Console.ReadLine();
+                WriteLine($"Write the {FileType} file name in the data folder");
+                var file = ReadLine();
                 var filePath = Constant.DefaultPath + file;
 
                 if (File.Exists(filePath) && file[^4..].Equals(Constant.CFGFileExtension))
@@ -104,7 +104,7 @@ namespace ConfigurationComparator
                     }
                     break;
                 }
-                Console.WriteLine("File not found");
+                WriteLine("File not found");
             }
         }
 
@@ -112,9 +112,9 @@ namespace ConfigurationComparator
         {
             foreach(var d in data)
             {
-                Console.WriteLine(d);
+                WriteLine(d);
             }
-            Console.WriteLine();
+            WriteLine();
         }
     }
 }
