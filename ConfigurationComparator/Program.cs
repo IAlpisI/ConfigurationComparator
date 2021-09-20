@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            var main = new Main();
+            var englishViz = new EnglishVisualization();
+            var main = new Main(englishViz);
             main.Run();
         }
     }

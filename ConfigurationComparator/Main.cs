@@ -1,62 +1,72 @@
-﻿using static System.Console;
+﻿//using static System.Console;
 using System.Collections.Generic;
 using System.IO;
+using ConfigurationComparator.Enums;
 
 namespace ConfigurationComparator
 {
     public class Main
     {
+        private readonly IConsole _console;
         private string SourceFilePath { get; set; }
         private string TargetFilePath { get; set; }
 
         private readonly List<Status> Statuses = new() { Status.Added, Status.Modified, Status.Removed, Status.Unchanged };
-        private const string TargetFile = "Target";
-        private const string SourceFile = "Source";
+
+        public Main(IConsole console)
+        {
+            _console = console;
+        }
 
         public void Run()
         {
-            bool run = true;
-
-            LookForFile(SourceFile);
-            LookForFile(TargetFile);
+            LookForFile(FileType.Target);
+            LookForFile(FileType.Source);
 
             var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(SourceFilePath));
             var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(TargetFilePath));
 
             var (Compared, Sustained) = Comparator.Compare(sourceData, targetData);
 
+            bool run = true;
             while (run)
             {
-                WriteLine("F to filter \nW to view the files \nQ to finish " +
+                _console.PrintToConsole("F to filter \nW to view the files \nQ to finish " +
                     "\nR to view report \nG to view records with string type ids " +
                     "\nV to view records with int type ids");
 
-                var command = ReadLine();
+                var command = _console.ReadInput();
 
-                switch (command)
-                {
-                    case "F":
-                        FilterData(Compared);
-                        break;
-                    case "W":
-                        WriteLine($"Source file - {SourceFilePath} \nTarget file - {TargetFilePath}");
-                        break;
-                    case "Q":
-                        run = false;
-                        break;
-                    case "R":
-                        Comparison.PrintReport(Compared);
-                        break;
-                    case "V":
-                        Print(Compared);
-                        break;
-                    case "G":
-                        Print(Sustained);
-                        break;
-                    default:
-                        break;
-                }
-                WriteLine();
+                ActivateCommand(command, ref run, Compared, Sustained);
+
+                _console.PrintToConsole();
+            }
+        }
+
+        private void ActivateCommand(string command, ref bool run, IEnumerable<Comparison> Compared, IEnumerable<SingleValue> Sustained)
+        {
+            switch (command)
+            {
+                case "F":
+                    FilterData(Compared);
+                    break;
+                case "W":
+                    _console.PrintToConsole($"Source file - {SourceFilePath} \nTarget file - {TargetFilePath}");
+                    break;
+                case "Q":
+                    run = false;
+                    break;
+                case "R":
+                    //Comparison.PrintReport(Compared);
+                    break;
+                case "V":
+                    Print(Compared);
+                    break;
+                case "G":
+                    Print(Sustained);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -65,10 +75,10 @@ namespace ConfigurationComparator
             List<Status> filter = new();
             int filterNumber = 4;
 
-            WriteLine("Write id");
-            var id = ReadLine();
-            WriteLine("Select filters \n0 - Added \n1 - Modified \n2 - Removed \n3 - Unchanged ");
-            var filters = ReadLine();
+            _console.PrintToConsole("Write id");
+            var id = _console.ReadInput();
+            _console.PrintToConsole("Select filters \n0 - Added \n1 - Modified \n2 - Removed \n3 - Unchanged ");
+            var filters = _console.ReadInput();
 
             for(int x=0;x<filterNumber;x++)
             {
@@ -78,25 +88,25 @@ namespace ConfigurationComparator
                 }
             }
 
-            Comparison.Filter(Data, id, filter);
+            //Comparison.Filter(Data, id, filter);
         }
 
-        private void LookForFile(string FileType)
+        private void LookForFile(FileType fileType)
         {
             while(true)
             {
-                WriteLine($"Write the {FileType} file name in the data folder");
-                var file = ReadLine();
-                var filePath = Constant.DefaultPath + file;
+                _console.PrintToConsole($"Write the {fileType} file name in the data folder");
+                var file = _console.ReadInput();
+                var filePath = Constants.DefaultPath + file;
 
-                if (File.Exists(filePath) && file[^4..].Equals(Constant.CFGFileExtension))
+                if (File.Exists(filePath) && file[^4..].Equals(Constants.CFGFileExtension))
                 {
-                    switch (FileType)
+                    switch (fileType)
                     {
-                        case SourceFile:
+                        case FileType.Source:
                             SourceFilePath = filePath;
                             break;
-                        case TargetFile:
+                        case FileType.Target:
                             TargetFilePath = filePath;
                             break;
                         default:
@@ -104,17 +114,17 @@ namespace ConfigurationComparator
                     }
                     break;
                 }
-                WriteLine("File not found");
+                _console.PrintToConsole("File not found");
             }
         }
 
-        private static void Print<T>(IEnumerable<T> data)
+        private void Print<T>(IEnumerable<T> data)
         {
             foreach(var d in data)
             {
-                WriteLine(d);
+                _console.PrintToConsole(d.ToString());
             }
-            WriteLine();
+            _console.PrintToConsole();
         }
     }
 }

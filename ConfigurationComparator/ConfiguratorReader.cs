@@ -5,13 +5,23 @@ using System.IO.Compression;
 
 namespace ConfigurationComparator
 {
-    class ConfiguratorReader
+    public static class ConfiguratorReader
     {
         public static Dictionary<string, string> Read(string path)
         {
             var data = new Dictionary<string, string>();
 
-            foreach (var line in File.ReadAllLines(path))
+            if (File.Exists(path))
+            {
+                ParseData(File.ReadAllLines(path), ref data);
+            }
+
+            return data;
+        }
+
+        public static void ParseData(string[] lines, ref Dictionary<string, string> data)
+        {
+            foreach (var line in lines)
             {
                 var parameters = line.Split(';', StringSplitOptions.RemoveEmptyEntries);
 
@@ -22,25 +32,16 @@ namespace ConfigurationComparator
                     data.Add(values.Item1, values.Item2);
                 }
             }
-
-            return data;
         }
 
         public static string Decompose(string path)
         {
-            var newFileName = path[..^4]; 
+            var newFileName = path[..^4];
 
-            try
-            {
-                using FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                using FileStream outputStream = new(newFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
-                gzip.CopyTo(outputStream);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while trying to open the file "+ex.Message);
-            }
+            using FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            using FileStream outputStream = new(newFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
+            gzip.CopyTo(outputStream);
 
             return newFileName;
         }
