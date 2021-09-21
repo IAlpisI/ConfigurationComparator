@@ -10,6 +10,7 @@ namespace ConfigurationComparator.Visitor
         public string Id { get; set; }
         public string Value { get; set; }
         public Param(string id, string value) => (Id, Value) = (id, value);
+        public override string ToString() => $"{Id} {Value}";
     }
 
     public class ParamComparator
@@ -18,71 +19,78 @@ namespace ConfigurationComparator.Visitor
         public Param Target { get; set; }
         public Status Status { get; set; }
 
-        public ParamComparator()
-        {
-
-        }
+        public ParamComparator(Param source) => (Source) = (source);
         public void SetTargetParam(Param target) => Target = target;
         public void SetSourceParam(Param source) => Source = source;
         public void SetStatus(Status status) => Status = status;
-        public void SetTargetValue(string target) => Target.Value = target;
+        public override string ToString() => $"{Source.Id} {Source.Value} {Target.Value} {Status}";
     }
 
     public interface IVisitor
     {
-        public ParamComparator Visit(Param param, IEnumerable<Param> type);
+        public void Visit(Param param, IEnumerable<Param> type, ref List<ParamComparator> data);
     }
 
     public class SourceVisitor : IVisitor
     {
-        public ParamComparator Visit(Param param, IEnumerable<Param> target)
+        public void Visit(Param param, IEnumerable<Param> target, ref List<ParamComparator> data)
         {
-            var comp = new ParamComparator();
+            var comp = new ParamComparator(param);
 
-            if (!target.Contains(param.Id, out var val))
+            if (target.Contains(param.Id, out var val))
             {
                 var status = param.Value == val.Value ? Status.Unchanged : Status.Modified;
 
-                comp.SetTargetValue(val.Value);
+                comp.SetTargetParam(val);
                 comp.SetStatus(status);
+            } else
+            {
+                comp.SetStatus(Status.Removed);
             }
 
-            comp.SetStatus(Status.Removed);
-
-            return comp;
+            data.Add(comp);
         }
     }
 
     public class TargetVisitor : IVisitor
     {
-        public ParamComparator Visit(Param param, IEnumerable<Param> source)
+        public void Visit(Param param, IEnumerable<Param> source, ref List<ParamComparator> data)
         {
-            var comp = new ParamComparator();
             if (!source.Contains(param.Id, out var val))
             {
-                comp.SetTargetParam(param);
-                comp.SetSourceParam(new Param(val.Id, val.Value));
-                comp.SetStatus(Status.Added);
-            }
+                var comp = new ParamComparator(param);
 
-            return comp;
+                comp.SetSourceParam(val);
+                comp.SetStatus(Status.Added);
+
+                data.Add(comp);
+            }
         }
     }
 
-    public class Handler
+    public class ConfiguratorHandler
     {
-        public void Comapare(IEnumerable<Param> source, IEnumerable<Param> target)
+        private List<ParamComparator> dataWithIntTypeIds;
+        private readonly List<Param> dataWithStringTypeIds;
+
+        public List<ParamComparator> GetIntTypeData() => dataWithIntTypeIds;
+        public List<Param> GetStringTypeData() => dataWithStringTypeIds;
+
+        public ConfiguratorHandler()
         {
-            var dataWithIntTypeIds = new List<ParamComparator>();
-            var dataWithStringTypeIds = new List<Param>();
+            dataWithIntTypeIds = new List<ParamComparator>();
+            dataWithStringTypeIds = new List<Param>();
+        }
+        public void Handle(IEnumerable<Param> source, IEnumerable<Param> target)
+        {
             var targetVisitor = new TargetVisitor();
             var sourceVisitor = new SourceVisitor();
 
-            Compare(target, ref dataWithStringTypeIds, ref dataWithIntTypeIds, targetVisitor, source);
-            Compare(source, ref dataWithStringTypeIds, ref dataWithIntTypeIds, sourceVisitor, target);
+            Compare(target, targetVisitor, source);
+            Compare(source, sourceVisitor, target);
         }
 
-        public void Compare(IEnumerable<Param> data, ref List<Param> dataWithStringTypeIds, ref List<ParamComparator> dataWithIntTypeIds, IVisitor visitor, IEnumerable<Param> toLook)
+        public void Compare(IEnumerable<Param> data, IVisitor visitor, IEnumerable<Param> toLook)
         {
             foreach (var d in data)
             {
@@ -92,8 +100,7 @@ namespace ConfigurationComparator.Visitor
                     continue;
                 }
 
-                var temp = visitor.Visit(d, toLook);
-                dataWithIntTypeIds.Add(temp);
+                visitor.Visit(d, toLook, ref dataWithIntTypeIds);
             }
         }
     }

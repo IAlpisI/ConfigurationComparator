@@ -1,7 +1,8 @@
-﻿//using static System.Console;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using ConfigurationComparator.Enums;
+using ConfigurationComparator.Extensions;
+using ConfigurationComparator.Visitor;
 
 namespace ConfigurationComparator
 {
@@ -26,7 +27,11 @@ namespace ConfigurationComparator
             var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(SourceFilePath));
             var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(TargetFilePath));
 
-            var (Compared, Sustained) = Comparator.Compare(sourceData, targetData);
+            var compHandler = new ConfiguratorHandler();
+            compHandler.Handle(sourceData, targetData);
+
+            var compared = compHandler.GetIntTypeData();
+            var sustained = compHandler.GetStringTypeData();
 
             bool run = true;
             while (run)
@@ -37,18 +42,18 @@ namespace ConfigurationComparator
 
                 var command = _console.ReadInput();
 
-                ActivateCommand(command, ref run, Compared, Sustained);
+                ActivateCommand(command, ref run, compared, sustained);
 
                 _console.PrintToConsole();
             }
         }
 
-        private void ActivateCommand(string command, ref bool run, IEnumerable<Comparison> Compared, IEnumerable<SingleValue> Sustained)
+        private void ActivateCommand(string command, ref bool run, IEnumerable<ParamComparator> compared, IEnumerable<Param> sustained)
         {
             switch (command)
             {
                 case "F":
-                    FilterData(Compared);
+                    FilterData(compared);
                     break;
                 case "W":
                     _console.PrintToConsole($"Source file - {SourceFilePath} \nTarget file - {TargetFilePath}");
@@ -57,20 +62,20 @@ namespace ConfigurationComparator
                     run = false;
                     break;
                 case "R":
-                    //Comparison.PrintReport(Compared);
+                    Print(compared.GetReport());
                     break;
                 case "V":
-                    Print(Compared);
+                    Print(compared);
                     break;
                 case "G":
-                    Print(Sustained);
+                    Print(sustained);
                     break;
                 default:
                     break;
             }
         }
 
-        private void FilterData(IEnumerable<Comparison> Data)
+        private void FilterData(IEnumerable<ParamComparator> data)
         {
             List<Status> filter = new();
             int filterNumber = 4;
@@ -88,7 +93,8 @@ namespace ConfigurationComparator
                 }
             }
 
-            //Comparison.Filter(Data, id, filter);
+            //Comparison.Filter(Data, filter, id);
+            data.Filter(filter, id);
         }
 
         private void LookForFile(FileType fileType)

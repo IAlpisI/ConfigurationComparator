@@ -1,26 +1,19 @@
-﻿using System;
+﻿using ConfigurationComparator.Visitor;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConfigurationComparator.Extensions
 {
     public static class FilterExtension
     {
-        public static void Filter(this IEnumerable<Comparison> comp, string Id, List<Status> filters)
+        public static IEnumerable<ParamComparator> Filter(this IEnumerable<ParamComparator> comp, List<Status> filters, string Id)
         {
             if (filters is null || comp is null)
             {
-                return;
+                return new List<ParamComparator>();
             }
 
-            //var filteredData = comp.Where(x => filters.Contains(x.Status) && x.Id.Contains(Id));
-
-            //foreach (var fd in filteredData)
-            //{
-            //    Console.WriteLine(fd);
-            //}
+            return comp.Where(x => filters.Contains(x.Status) && x.Source.Id.Contains(Id));
         }
     }
 }

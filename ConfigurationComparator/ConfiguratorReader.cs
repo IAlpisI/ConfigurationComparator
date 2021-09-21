@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConfigurationComparator.Visitor;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -7,9 +8,9 @@ namespace ConfigurationComparator
 {
     public static class ConfiguratorReader
     {
-        public static Dictionary<string, string> Read(string path)
+        public static IEnumerable<Param> Read(string path)
         {
-            var data = new Dictionary<string, string>();
+            var data = new List<Param>();
 
             if (File.Exists(path))
             {
@@ -19,7 +20,7 @@ namespace ConfigurationComparator
             return data;
         }
 
-        public static void ParseData(string[] lines, ref Dictionary<string, string> data)
+        public static void ParseData(string[] lines, ref List<Param> data)
         {
             foreach (var line in lines)
             {
@@ -29,7 +30,7 @@ namespace ConfigurationComparator
                 {
                     var temp = p.Split(':');
                     var values = temp.Length == 2 ? (temp[0], temp[1]) : (temp[0], string.Empty);
-                    data.Add(values.Item1, values.Item2);
+                    data.Add(new Param(values.Item1, values.Item2));
                 }
             }
         }

@@ -1,26 +1,19 @@
-﻿using System;
+﻿using ConfigurationComparator.Visitor;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConfigurationComparator.Extensions
 {
     public static class PrintReportExtension
     {
-        public static void PrintReport(this IEnumerable<Comparison> comp)
+        public static IEnumerable<Param> GetReport(this IEnumerable<ParamComparator> comp)
         {
             if (comp is null)
             {
-                return;
+                return new List<Param>();
             }
 
-            //var reportValues = comp.GroupBy(x => x.Status).Select(c => new SingleValue(c.Key.ToString(), c.Count().ToString()));
-
-            //foreach (var value in reportValues)
-            //{
-            //    Console.WriteLine(value);
-            //}
+            return comp.GroupBy(x => x.Status).Select(c => new Param(c.Key.ToString(), c.Count().ToString()));
         }
     }
 }
