@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using ConfigurationComparator.ConfigurationHandler;
+using ConfigurationComparator.ConfigurationVisitor;
 using ConfigurationComparator.Enums;
 using ConfigurationComparator.Extensions;
-using ConfigurationComparator.Visitor;
 
 namespace ConfigurationComparator
 {
@@ -43,12 +44,10 @@ namespace ConfigurationComparator
                 var command = _console.ReadInput();
 
                 ActivateCommand(command, ref run, compared, sustained);
-
-                _console.PrintToConsole();
             }
         }
 
-        private void ActivateCommand(string command, ref bool run, IEnumerable<ParamComparator> compared, IEnumerable<Param> sustained)
+        private void ActivateCommand(string command, ref bool run, IEnumerable<ComparatorParameters> compared, IEnumerable<ConfigurationParameters> sustained)
         {
             switch (command)
             {
@@ -73,9 +72,10 @@ namespace ConfigurationComparator
                 default:
                     break;
             }
+            _console.PrintToConsole();
         }
 
-        private void FilterData(IEnumerable<ParamComparator> data)
+        private void FilterData(IEnumerable<ComparatorParameters> data)
         {
             List<Status> filter = new();
             int filterNumber = 4;
@@ -93,8 +93,7 @@ namespace ConfigurationComparator
                 }
             }
 
-            //Comparison.Filter(Data, filter, id);
-            data.Filter(filter, id);
+            Print(data.Filter(filter, id));
         }
 
         private void LookForFile(FileType fileType)

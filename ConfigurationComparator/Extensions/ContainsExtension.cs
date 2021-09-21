@@ -1,12 +1,11 @@
-﻿using ConfigurationComparator.Visitor;
-using System;
+﻿using ConfigurationComparator.ConfigurationVisitor;
 using System.Collections.Generic;
 
 namespace ConfigurationComparator.Extensions
 {
     public static class ContainsExtension
     {
-        public static bool Contains(this IEnumerable<Param> data, string id, out Param val)
+        public static bool TryToFindById(this IEnumerable<ConfigurationParameters> data, string id, out ConfigurationParameters val)
         {
             val = null;
 

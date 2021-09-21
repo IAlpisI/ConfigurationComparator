@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ConfigurationComparator
+﻿namespace ConfigurationComparator
 {
     public interface IConsole
     {

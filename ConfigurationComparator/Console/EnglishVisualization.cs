@@ -1,5 +1,4 @@
 ﻿using static System.Console;
-using System.Collections.Generic;
 
 namespace ConfigurationComparator
 {
