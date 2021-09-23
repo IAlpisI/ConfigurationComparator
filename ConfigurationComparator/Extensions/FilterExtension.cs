@@ -14,7 +14,9 @@ namespace ConfigurationComparator.Extensions
                 return new List<ComparatorParameters>();
             }
 
-            return comp.Where(x => filters.Contains(x.Status) && x.Source.Id.Contains(Id));
+            return comp.Where(x => x.IsStatusAvailable() &&
+            filters.Contains(x.GetStatus()) &&
+            x.Source.Id.Contains(Id));
         }
     }
 }

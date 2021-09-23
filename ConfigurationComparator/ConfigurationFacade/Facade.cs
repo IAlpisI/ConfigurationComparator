@@ -7,13 +7,11 @@ namespace ConfigurationComparator.ConfigurataionFacade
 {
     public class Facade
     {
-        private readonly IConsole _console;
         private readonly CommandHandler commandHandler;
         private readonly LocateFiles locateFiles;
         private readonly ConfiguratorHandler configuratorHandler;
         public Facade(IConsole console)
         {
-            _console = console;
             commandHandler = new CommandHandler(console);
             locateFiles = new LocateFiles(console);
             configuratorHandler = new ConfiguratorHandler();
@@ -29,26 +27,9 @@ namespace ConfigurationComparator.ConfigurataionFacade
 
             configuratorHandler.Handle(sourceData, targetData);
         }
-        public void RunCommands()
+        public void InitializeCommands()
         {
-            bool run = true;
-            while (run)
-            {
-                _console.PrintToConsole("1 to filter " +
-                    "\n2 to view report \n3 to view records with string type ids " +
-                    "\n4 to view records with int type ids \nQ to finish ");
-
-                var command = _console.ReadInput();
-                if(int.TryParse(command, out var nr))
-                {
-                    commandHandler.Handle(nr, configuratorHandler.GetComparatorData());
-                }
-
-                if(command.Equals('Q'))
-                {
-                    break;
-                }
-            }
+            commandHandler.StartCommands(configuratorHandler.GetComparatorData());
         }
     }
 }

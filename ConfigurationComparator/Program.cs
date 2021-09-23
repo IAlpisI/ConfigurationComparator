@@ -14,7 +14,7 @@ namespace ConfigurationComparator
             var facade = new Facade(ev);
 
             facade.InitializeData();
-            facade.RunCommands();
+            facade.InitializeCommands();
         }
 
         //static IHostBuilder CreateHostBuilder(string[] args) =>
