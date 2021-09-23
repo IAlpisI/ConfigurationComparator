@@ -10,10 +10,10 @@ namespace ConfigurationComparator.ConfigurataionFacade
         private readonly CommandHandler commandHandler;
         private readonly LocateFiles locateFiles;
         private readonly ConfiguratorHandler configuratorHandler;
-        public Facade(IConsole console)
+        public Facade(IDataProcess dataProcess)
         {
-            commandHandler = new CommandHandler(console);
-            locateFiles = new LocateFiles(console);
+            commandHandler = new CommandHandler(dataProcess);
+            locateFiles = new LocateFiles(dataProcess);
             configuratorHandler = new ConfiguratorHandler();
         }
 

@@ -1,5 +1,6 @@
 ﻿using ConfigurationComparator.ConfigurationHandler;
 using ConfigurationComparator.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace ConfigurationComparator.ConfigurationVisitor

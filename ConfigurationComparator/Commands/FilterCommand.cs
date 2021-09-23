@@ -5,24 +5,22 @@ using System.Collections.Generic;
 
 namespace ConfigurationComparator.Commands
 {
-    public class FilterCommand : ICommand
+    public class FilterCommand : Command
     {
-        private readonly IConsole _console;
         private readonly List<Status> Statuses = new() { Status.Added, Status.Modified, Status.Removed, Status.Unchanged };
-        public FilterCommand(IConsole console)
+        public FilterCommand(IDataProcess dataProcess):base(dataProcess)
         {
-            _console = console;
         }
 
-        public void Execute(IEnumerable<ComparatorParameters> cp)
+        public override void Execute(IEnumerable<ComparatorParameters> cp)
         {
             List<Status> filter = new();
             int filterNumber = 4;
 
-            _console.PrintToConsole("Write id");
-            var id = _console.ReadInput();
-            _console.PrintToConsole("Select filters \n0 - Added \n1 - Modified \n2 - Removed \n3 - Unchanged ");
-            var filters = _console.ReadInput();
+            _dataProcess.Print("Write id");
+            var id = _dataProcess.ReadInput();
+            _dataProcess.Print("Select filters \n0 - Added \n1 - Modified \n2 - Removed \n3 - Unchanged ");
+            var filters = _dataProcess.ReadInput();
 
             for (int x = 0; x < filterNumber; x++)
             {
@@ -32,7 +30,7 @@ namespace ConfigurationComparator.Commands
                 }
             }
 
-            _console.PrintListOfData(cp.Filter(filter, id));
+            _dataProcess.PrintListOfData(cp.Filter(filter, id));
         }
     }
 }

@@ -3,7 +3,7 @@ using static System.Console;
 
 namespace ConfigurationComparator
 {
-    public class EnglishVisualization : IConsole
+    public class Console : IDataProcess
     {
 
         public string ReadInput()
@@ -11,12 +11,12 @@ namespace ConfigurationComparator
             return ReadLine();
         }
 
-        public void PrintToConsole(string value)
+        public void Print(string value)
         {
             WriteLine(value);
         }
 
-        public void PrintToConsole()
+        public void Print()
         {
             WriteLine();
         }

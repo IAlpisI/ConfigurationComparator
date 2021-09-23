@@ -7,20 +7,20 @@ namespace ConfigurationComparator.HandleFiles
     {
         private string SourceFilePath { get; set; }
         private string TargetFilePath { get; set; }
-        private readonly IConsole _console;
+        private readonly IDataProcess _dataProcess;
         public string GetSourceFile => SourceFilePath;
         public string GetTargetFile => TargetFilePath;
-        public LocateFiles(IConsole console)
+        public LocateFiles(IDataProcess dataProcess)
         {
-            _console = console;
+            _dataProcess = dataProcess;
         }
 
         public void LookForFile(FileType fileType)
         {
             while (true)
             {
-                _console.PrintToConsole($"Write the {fileType} file name in the data folder");
-                var file = _console.ReadInput();
+                _dataProcess.Print($"Write the {fileType} file name in the data folder");
+                var file = _dataProcess.ReadInput();
                 var filePath = Constants.DefaultPath + file;
 
                 if (File.Exists(filePath) && file[^4..].Equals(Constants.CFGFileExtension))
@@ -38,7 +38,7 @@ namespace ConfigurationComparator.HandleFiles
                     }
                     break;
                 }
-                _console.PrintToConsole("File not found");
+                _dataProcess.Print("File not found");
             }
         }
     }

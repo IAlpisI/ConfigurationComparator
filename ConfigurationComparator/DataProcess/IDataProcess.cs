@@ -2,11 +2,11 @@
 
 namespace ConfigurationComparator
 {
-    public interface IConsole
+    public interface IDataProcess
     {
-        public void PrintToConsole(string value);
+        public void Print(string value);
         public string ReadInput();
-        public void PrintToConsole();
+        public void Print();
         public void PrintListOfData<T>(IEnumerable<T> data);
     }
 }

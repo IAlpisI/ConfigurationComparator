@@ -39,7 +39,7 @@ namespace ConfigurationComparator.ConfigurationHandler
         {
             var status = IsStatusAvailable() ? GetStatus().ToString() : string.Empty;
 
-            return $"{Source.Id} {Source.Value} {Target.Value} {status}";
+            return $"{Source.Id} {Source.Value} {Target.Id} {Target.Value} {status}";
         }
     }
 }

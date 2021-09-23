@@ -15,8 +15,8 @@ namespace ConfigurationComparator.Extensions
             }
 
             return comp.Where(x => x.IsStatusAvailable() &&
-            filters.Contains(x.GetStatus()) &&
-            x.Source.Id.Contains(Id));
+                    filters.Contains(x.GetStatus()) &&
+                    x.Source.Id.Contains(Id));
         }
     }
 }

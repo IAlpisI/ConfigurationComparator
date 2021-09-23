@@ -1,27 +1,23 @@
 ﻿using ConfigurationComparator.ConfigurationHandler;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConfigurationComparator.Commands
 {
     public class CommandHandler
     {
-        private readonly Dictionary<int, ICommand> Commands;
-        private readonly IConsole _console;
+        private readonly Dictionary<int, Command> Commands;
+        private readonly IDataProcess _console;
 
-        public CommandHandler(IConsole console)
+        public CommandHandler(IDataProcess console)
         {
             _console = console;
 
-            Commands = new Dictionary<int, ICommand>
+            Commands = new Dictionary<int, Command>
             {
                 { 1, new FilterCommand(console) },
                 { 2, new ViewReportCommand(console) },
                 { 3, new DataWithStringTypeIdCommand(console) },
-                //{ 4, new DataWithIntTypeIdCommand(console) },
+                { 4, new DataWithIntTypeIdCommand(console) },
             };
         }
 
@@ -37,7 +33,7 @@ namespace ConfigurationComparator.Commands
         {
             while (true)
             {
-                _console.PrintToConsole("1 to filter " +
+                _console.Print("1 to filter " +
                     "\n2 to view report \n3 to view records with string type ids " +
                     "\n4 to view records with int type ids \nQ to finish ");
 

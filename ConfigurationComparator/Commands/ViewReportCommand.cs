@@ -4,17 +4,15 @@ using System.Collections.Generic;
 
 namespace ConfigurationComparator.Commands
 {
-    public class ViewReportCommand : ICommand
+    public class ViewReportCommand : Command
     {
-        private readonly IConsole _console;
-        public ViewReportCommand(IConsole console)
+        public ViewReportCommand(IDataProcess dataProcess):base(dataProcess)
         {
-            _console = console;
         }
 
-        public void Execute(IEnumerable<ComparatorParameters> cp)
+        public override void Execute(IEnumerable<ComparatorParameters> cp)
         {
-            _console.PrintListOfData(cp.GetReport());
+            _dataProcess.PrintListOfData(cp.GetReport());
         }
     }
 }

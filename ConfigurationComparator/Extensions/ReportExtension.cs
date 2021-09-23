@@ -1,6 +1,5 @@
 ﻿using ConfigurationComparator.Commands;
 using ConfigurationComparator.ConfigurationHandler;
-using ConfigurationComparator.ConfigurationVisitor;
 using System.Collections.Generic;
 using System.Linq;
 
