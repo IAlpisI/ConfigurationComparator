@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ConfigurationComparator.ConfigurationVisitor
 {
-    public class TargetVisitor : IVisitor
+    public class TargetVisitor
     {
         public void Visit(ConfigurationParameters param, IEnumerable<ConfigurationParameters> source, ref List<ComparatorParameters> data)
         {

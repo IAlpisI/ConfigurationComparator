@@ -11,8 +11,10 @@ namespace ConfigurationComparator
             //using IHost host = CreateHostBuilder(args).Build();
 
             var ev = new EnglishVisualization();
-            var main = new Main(ev);
-            main.Run();
+            var facade = new Facade(ev);
+
+            facade.InitializeData();
+            facade.RunCommands();
         }
 
         //static IHostBuilder CreateHostBuilder(string[] args) =>

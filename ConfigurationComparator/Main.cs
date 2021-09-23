@@ -35,7 +35,6 @@ namespace ConfigurationComparator
             //var compared = compHandler.GetIntTypeData();
             //var sustained = compHandler.GetStringTypeData();
 
-            facade.RunCommands();
 
             //bool run = true;
             //while (run)

@@ -6,7 +6,7 @@ using System;
 
 namespace ConfigurationComparator.ConfigurationVisitor
 {
-    public class SourceVisitor : IVisitor
+    public class SourceVisitor 
     {
         public void Visit(ConfigurationParameters param, IEnumerable<ConfigurationParameters> target, ref List<ComparatorParameters> data)
         {

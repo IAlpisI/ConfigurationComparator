@@ -5,6 +5,6 @@ namespace ConfigurationComparator.ConfigurationVisitor
 {
     public interface IVisitor
     {
-        public void Visit(ConfigurationParameters param, IEnumerable<ConfigurationParameters> type, ref List<ComparatorParameters> data);
+        public void Visit(ConfigurationParameters param, List<ConfigurationParameters> type, ref List<ComparatorParameters> data);
     }
 }

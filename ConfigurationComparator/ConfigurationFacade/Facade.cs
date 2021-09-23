@@ -36,11 +36,18 @@ namespace ConfigurationComparator.ConfigurataionFacade
             {
                 _console.PrintToConsole("1 to filter " +
                     "\n2 to view report \n3 to view records with string type ids " +
-                    "\n4 to view records with int type ids " +
-                    "\n5 to view the files \n6 to finish ");
+                    "\n4 to view records with int type ids \nQ to finish ");
 
                 var command = _console.ReadInput();
-                commandHandler.Handle(int.Parse(command), null);
+                if(int.TryParse(command, out var nr))
+                {
+                    commandHandler.Handle(nr, configuratorHandler.GetComparatorData());
+                }
+
+                if(command.Equals('Q'))
+                {
+                    break;
+                }
             }
         }
     }
