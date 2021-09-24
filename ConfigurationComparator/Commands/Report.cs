@@ -4,8 +4,8 @@ namespace ConfigurationComparator.Commands
 {
     public class Report
     {
-        private Status Status { get; set; }
-        private int Count { get; set; }
+        private readonly Status Status;
+        private readonly int Count;
 
         public Report(Status s, int c) => (Status, Count) = (s, c);
 
