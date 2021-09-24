@@ -5,8 +5,8 @@ namespace ConfigurationComparator.ConfigurationHandler
 {
     public class ComparatorParameters
     {
-        public ConfigurationParameters Source { get; set; }
-        public ConfigurationParameters Target { get; set; }
+        public ConfigurationParameters Source { get; }
+        public ConfigurationParameters Target { get; }
 
         public ComparatorParameters(ConfigurationParameters source)
         {
@@ -37,9 +37,7 @@ namespace ConfigurationComparator.ConfigurationHandler
         public bool IsStatusAvailable() => int.TryParse(Source.Id, out _) || int.TryParse(Target.Id, out _);
         public override string ToString()
         {
-            var status = IsStatusAvailable() ? GetStatus().ToString() : string.Empty;
-
-            return $"{Source.Id} {Source.Value} {Target.Id} {Target.Value} {status}";
+            return $"{Source.Id} {Source.Value} {Target.Id} {Target.Value} {(IsStatusAvailable() ? GetStatus().ToString() : string.Empty)}";
         }
     }
 }

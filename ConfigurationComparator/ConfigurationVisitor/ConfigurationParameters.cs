@@ -2,8 +2,8 @@
 {
     public class ConfigurationParameters
     {
-        public string Id { get; set; }
-        public string Value { get; set; }
+        public string Id { get; }
+        public string Value { get; }
         public ConfigurationParameters()
         {
             Id = string.Empty;

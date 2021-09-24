@@ -5,12 +5,12 @@ using ConfigurationComparator.HandleFiles;
 
 namespace ConfigurationComparator.ConfigurataionFacade
 {
-    public class Facade
+    public class ConfigurationService
     {
         private readonly CommandHandler commandHandler;
         private readonly LocateFiles locateFiles;
         private readonly ConfiguratorHandler configuratorHandler;
-        public Facade(IDataProcess dataProcess)
+        public ConfigurationService(IDataProcess dataProcess)
         {
             commandHandler = new CommandHandler(dataProcess);
             locateFiles = new LocateFiles(dataProcess);

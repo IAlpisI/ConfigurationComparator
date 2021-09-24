@@ -21,7 +21,7 @@ namespace ConfigurationComparator.Commands
             };
         }
 
-        public void Handle(int command, IEnumerable<ComparatorParameters> cp)
+        private void Handle(int command, IEnumerable<ComparatorParameters> cp)
         {
             if(Commands.TryGetValue(command, out _))
             {
@@ -33,9 +33,7 @@ namespace ConfigurationComparator.Commands
         {
             while (true)
             {
-                _console.Print("1 to filter " +
-                    "\n2 to view report \n3 to view records with string type ids " +
-                    "\n4 to view records with int type ids \nQ to finish ");
+                DisplayCommands();
 
                 var command = _console.ReadInput();
                 if(int.TryParse(command, out var nr))
@@ -43,11 +41,21 @@ namespace ConfigurationComparator.Commands
                     Handle(nr, param);
                 }
 
-                if(command.Equals('Q'))
+                if(command.Equals("Q"))
                 {
                     break;
                 }
             }
+        }
+
+        private void DisplayCommands()
+        {
+            foreach (var c in Commands)
+            {
+                var commandName = c.Value.ToString().Split('.')[^1];
+                _console.Print($"Press {c.Key} to activate {commandName}");
+            }
+            _console.Print("Press Q to finish");
         }
     }
 }
