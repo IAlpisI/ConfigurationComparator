@@ -7,12 +7,11 @@ namespace ConfigurationComparator
     {
         static void Main(string[] args)
         {
-            #nullable enable
             var console = new Console();
-            var facade = new ConfigurationService(console);
+            var service = new ConfigurationService(console);
 
-            facade.InitializeData();
-            facade.InitializeCommands();
+            service.InitializeData();
+            service.InitializeCommands();
         }
     }
 }
