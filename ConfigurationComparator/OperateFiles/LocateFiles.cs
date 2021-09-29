@@ -8,13 +8,13 @@ namespace ConfigurationComparator.HandleFiles
     {
         private string SourceFilePath { get; set; }
         private string TargetFilePath { get; set; }
-        private readonly IMessageWriter _dataProcess;
+        private readonly IMessageWriter _messageWriter;
         private readonly IMessageReader _messageReader;
         public string GetSourceFile => SourceFilePath;
         public string GetTargetFile => TargetFilePath;
-        public LocateFiles(IMessageWriter dataProcess, IMessageReader messageReader)
+        public LocateFiles(IMessageWriter messageWriter, IMessageReader messageReader)
         {
-            _dataProcess = dataProcess;
+            _messageWriter = messageWriter;
             _messageReader = messageReader;
         }
 
@@ -22,7 +22,7 @@ namespace ConfigurationComparator.HandleFiles
         {
             while (true)
             {
-                _dataProcess.Write($"Write the {fileType} file name in the data folder");
+                _messageWriter.Write($"Write the {fileType} file name in the data folder");
                 var file = _messageReader.Read();
                 var filePath = Constants.DefaultPath + file;
 
@@ -41,7 +41,7 @@ namespace ConfigurationComparator.HandleFiles
                     }
                     break;
                 }
-                _dataProcess.Write("File not found");
+                _messageWriter.Write("File not found");
             }
         }
     }
