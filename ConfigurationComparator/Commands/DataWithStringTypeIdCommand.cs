@@ -1,4 +1,5 @@
 ﻿using ConfigurationComparator.ConfigurationHandler;
+using ConfigurationComparator.Logging;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,14 +7,14 @@ namespace ConfigurationComparator.Commands
 {
     public class DataWithStringTypeIdCommand : Command
     {
-        public DataWithStringTypeIdCommand(IDataProcess dataProcess):base(dataProcess)
+        public DataWithStringTypeIdCommand(IMessageWriter messageWriter) :base(messageWriter)
         {
         }
         public override void Execute(IEnumerable<ComparatorParameters> cp)
         {
             var data = cp.Where(x => !x.IsStatusAvailable());
 
-            _dataProcess.PrintListOfData(data);
+            _messageWriter.WriteData(data);
         }
     }
 }

@@ -1,18 +1,19 @@
 ﻿using ConfigurationComparator.ConfigurationHandler;
 using ConfigurationComparator.Extensions;
+using ConfigurationComparator.Logging;
 using System.Collections.Generic;
 
 namespace ConfigurationComparator.Commands
 {
     public class ViewReportCommand : Command
     {
-        public ViewReportCommand(IDataProcess dataProcess):base(dataProcess)
+        public ViewReportCommand(IMessageWriter messageWriter):base(messageWriter)
         {
         }
 
         public override void Execute(IEnumerable<ComparatorParameters> cp)
         {
-            _dataProcess.PrintListOfData(cp.GetReport());
+            _messageWriter.WriteData(cp.GetReport());
         }
     }
 }

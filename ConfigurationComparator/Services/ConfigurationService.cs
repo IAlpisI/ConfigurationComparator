@@ -2,6 +2,7 @@
 using ConfigurationComparator.ConfigurationVisitor;
 using ConfigurationComparator.Enums;
 using ConfigurationComparator.HandleFiles;
+using ConfigurationComparator.Logging;
 
 namespace ConfigurationComparator.ConfigurataionFacade
 {
@@ -10,10 +11,10 @@ namespace ConfigurationComparator.ConfigurataionFacade
         private readonly CommandHandler commandHandler;
         private readonly LocateFiles locateFiles;
         private readonly ConfiguratorHandler configuratorHandler;
-        public ConfigurationService(IDataProcess dataProcess)
+        public ConfigurationService(IMessageWriter messageWriter, IMessageReader messageReader)
         {
-            commandHandler = new CommandHandler(dataProcess);
-            locateFiles = new LocateFiles(dataProcess);
+            commandHandler = new CommandHandler(messageWriter, messageReader);
+            locateFiles = new LocateFiles(messageWriter, messageReader);
             configuratorHandler = new ConfiguratorHandler();
         }
 

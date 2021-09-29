@@ -1,4 +1,5 @@
 ﻿using ConfigurationComparator.ConfigurationHandler;
+using ConfigurationComparator.Logging;
 using System.Collections.Generic;
 
 namespace ConfigurationComparator.Commands
@@ -6,18 +7,20 @@ namespace ConfigurationComparator.Commands
     public class CommandHandler
     {
         private readonly Dictionary<int, Command> Commands;
-        private readonly IDataProcess _console;
+        private readonly IMessageWriter _messageWriter;
+        private readonly IMessageReader _messageReader;
 
-        public CommandHandler(IDataProcess console)
+        public CommandHandler(IMessageWriter messageWriter, IMessageReader messageReader)
         {
-            _console = console;
+            _messageWriter = messageWriter;
+            _messageReader = messageReader;
 
             Commands = new Dictionary<int, Command>
             {
-                { 1, new FilterCommand(console) },
-                { 2, new ViewReportCommand(console) },
-                { 3, new DataWithStringTypeIdCommand(console) },
-                { 4, new DataWithIntTypeIdCommand(console) },
+                { 1, new FilterCommand(messageWriter, messageReader) },
+                { 2, new ViewReportCommand(messageWriter) },
+                { 3, new DataWithStringTypeIdCommand(messageWriter) },
+                { 4, new DataWithIntTypeIdCommand(messageWriter) },
             };
         }
 
@@ -35,7 +38,7 @@ namespace ConfigurationComparator.Commands
             {
                 DisplayCommands();
 
-                var command = _console.ReadInput();
+                var command = _messageReader.Read();
                 if(int.TryParse(command, out var nr))
                 {
                     Handle(nr, param);
@@ -53,9 +56,9 @@ namespace ConfigurationComparator.Commands
             foreach (var c in Commands)
             {
                 var commandName = c.Value.ToString().Split('.')[^1];
-                _console.Print($"Press {c.Key} to activate {commandName}");
+                _messageWriter.Write($"Press {c.Key} to activate {commandName}");
             }
-            _console.Print("Press Q to finish");
+            _messageWriter.Write("Press Q to finish");
         }
     }
 }

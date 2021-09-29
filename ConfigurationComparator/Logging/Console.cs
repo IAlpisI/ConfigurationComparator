@@ -1,27 +1,27 @@
 ﻿using System.Collections.Generic;
 using static System.Console;
 
-namespace ConfigurationComparator
+namespace ConfigurationComparator.Logging
 {
-    public class Console : IDataProcess
+    public class Console : IMessageWriter, IMessageReader
     {
 
-        public string ReadInput()
+        public string Read()
         {
             return ReadLine();
         }
 
-        public void Print(string value)
+        public void Write(string value)
         {
             WriteLine(value);
         }
 
-        public void Print()
+        public void Write()
         {
             WriteLine();
         }
 
-        public void PrintListOfData<T>(IEnumerable<T> data)
+        public void WriteData<T>(IEnumerable<T> data)
         {
             foreach (var d in data)
             {

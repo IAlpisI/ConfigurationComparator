@@ -1,5 +1,5 @@
 ﻿using ConfigurationComparator.ConfigurataionFacade;
-
+using ConfigurationComparator.Logging;
 
 namespace ConfigurationComparator
 {
@@ -8,7 +8,7 @@ namespace ConfigurationComparator
         static void Main(string[] args)
         {
             var console = new Console();
-            var service = new ConfigurationService(console);
+            var service = new ConfigurationService(console, console);
 
             service.InitializeData();
             service.InitializeCommands();
