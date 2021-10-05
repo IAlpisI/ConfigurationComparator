@@ -19,31 +19,43 @@ namespace ConfigurationComparator.HandleFiles
             _messageReader = messageReader;
         }
 
-        public void LookForFile(FileType fileType)
+        public void LookForFile(FileType fileType, string extension)
         {
             while (true)
             {
                 _messageWriter.Write($"Write the {fileType} file name in the data folder");
                 var file = _messageReader.Read();
-                var filePath = Constants.DefaultPath + file;
+                var filePath = Path.Combine(Constants.DefaultPath, file);
 
-                if (File.Exists(filePath) && file.CheckFileExtention(Constants.CFGFileExtension))
+                if (!FileExists(fileType, extension, filePath, file))
                 {
-                    switch (fileType)
-                    {
-                        case FileType.Source:
-                            SourceFilePath = filePath;
-                            break;
-                        case FileType.Target:
-                            TargetFilePath = filePath;
-                            break;
-                        default:
-                            break;
-                    }
+                    _messageWriter.Write("File not found");
                     break;
                 }
-                _messageWriter.Write("File not found");
             }
         }
+
+        public bool FileExists(FileType fileType, string extension, string filePath, string file)
+        {
+            if (CheckFile(extension, filePath, file))
+            {
+                switch (fileType)
+                {
+                    case FileType.Source:
+                        SourceFilePath = filePath;
+                        break;
+                    case FileType.Target:
+                        TargetFilePath = filePath;
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool CheckFile(string extension, string filePath, string file) =>
+            File.Exists(filePath) && file.CheckFileExtention(extension);
     }
 }

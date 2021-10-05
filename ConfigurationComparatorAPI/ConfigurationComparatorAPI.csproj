@@ -12,4 +12,8 @@
     <ProjectReference Include="..\ConfigurationComparator\ConfigurationComparator.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Upload\" />
+  </ItemGroup>
+
 </Project>

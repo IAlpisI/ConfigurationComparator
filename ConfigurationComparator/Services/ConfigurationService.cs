@@ -4,8 +4,9 @@ using ConfigurationComparator.Enums;
 using ConfigurationComparator.Extensions;
 using ConfigurationComparator.HandleFiles;
 using ConfigurationComparator.Logging;
+using ConfigurationComparator.OperateFiles;
 using ConfigurationComparatorAPI.Dtos;
-//using ConfigurationComparator.Dto
+using Microsoft.AspNetCore.Http;
 using System.IO;
 
 namespace ConfigurationComparator.ConfigurataionService
@@ -28,8 +29,8 @@ namespace ConfigurationComparator.ConfigurataionService
 
         public void InitializeData()
         {
-            locateFiles.LookForFile(FileType.Target);
-            locateFiles.LookForFile(FileType.Source);
+            locateFiles.LookForFile(FileType.Target, Constants.CFGFileExtension);
+            locateFiles.LookForFile(FileType.Source, Constants.CFGFileExtension);
 
             var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(locateFiles.GetSourceFile));
             var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(locateFiles.GetTargetFile));
@@ -41,19 +42,37 @@ namespace ConfigurationComparator.ConfigurataionService
             commandHandler.StartCommands(configuratorHandler.GetComparatorData());
         }
 
-        public bool TryUploadFiles(string sourceFileName, string targetFileName, string extension)
+        public bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile, string extension)
         {
+            var sourceFileName = sourceFile.FileName;
+            var targetFileName = targetFile.FileName;
+            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), @"Upload");
+
             if (sourceFileName.CheckFileExtention(extension) 
                 && targetFileName.CheckFileExtention(extension))
             {
-
-
+                ConfigurationWriter.Write(sourceFile, directoryPath);
+                ConfigurationWriter.Write(targetFile, directoryPath);
 
                 return true;
             }
 
             return false;
-            //return Path.Combine(Directory.GetCurrentDirectory(), @"Upload/files");
+        }
+
+        public ComparatorResponseDTO GetResponse(IFormFile sourceFile, IFormFile targetFile)
+        {
+            var response = new ComparatorResponseDTO();
+
+
+            return response;
+        }
+
+        public bool FilesArePresent(IFormFile file, string extension)
+        {
+            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), @"Upload");
+
+            return locateFiles.CheckFile(extension, directoryPath, file.FileName);
         }
     }
 }

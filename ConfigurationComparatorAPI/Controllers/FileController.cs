@@ -22,10 +22,11 @@ namespace ConfigurationComparatorAPI.Controllers
         public async Task<IActionResult> Upload(IFormFile source, IFormFile target)
         {
 
-            var success = _configurationService.TryUploadFiles(source.FileName, target.FileName, Constants.CFGFileExtension);
+            var success = ConfigurationService.TryUploadFiles(source, target, Constants.CFGFileExtension);
 
             if (success)
             {
+
                 return Ok();
             }
 
