@@ -1,10 +1,14 @@
 ﻿using ConfigurationComparator.Commands;
 using ConfigurationComparator.ConfigurationVisitor;
 using ConfigurationComparator.Enums;
+using ConfigurationComparator.Extensions;
 using ConfigurationComparator.HandleFiles;
 using ConfigurationComparator.Logging;
+using ConfigurationComparatorAPI.Dtos;
+//using ConfigurationComparator.Dto
+using System.IO;
 
-namespace ConfigurationComparator.ConfigurataionFacade
+namespace ConfigurationComparator.ConfigurataionService
 {
     public class ConfigurationService
     {
@@ -16,6 +20,10 @@ namespace ConfigurationComparator.ConfigurataionFacade
             commandHandler = new CommandHandler(messageWriter, messageReader);
             locateFiles = new LocateFiles(messageWriter, messageReader);
             configuratorHandler = new ConfiguratorHandler();
+        }
+
+        public ConfigurationService()
+        {
         }
 
         public void InitializeData()
@@ -31,6 +39,21 @@ namespace ConfigurationComparator.ConfigurataionFacade
         public void InitializeCommands()
         {
             commandHandler.StartCommands(configuratorHandler.GetComparatorData());
+        }
+
+        public bool TryUploadFiles(string sourceFileName, string targetFileName, string extension)
+        {
+            if (sourceFileName.CheckFileExtention(extension) 
+                && targetFileName.CheckFileExtention(extension))
+            {
+
+
+
+                return true;
+            }
+
+            return false;
+            //return Path.Combine(Directory.GetCurrentDirectory(), @"Upload/files");
         }
     }
 }

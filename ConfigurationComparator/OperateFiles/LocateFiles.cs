@@ -1,6 +1,7 @@
 ﻿using ConfigurationComparator.Enums;
 using ConfigurationComparator.Logging;
 using System.IO;
+using ConfigurationComparator.Extensions;
 
 namespace ConfigurationComparator.HandleFiles
 {
@@ -26,7 +27,7 @@ namespace ConfigurationComparator.HandleFiles
                 var file = _messageReader.Read();
                 var filePath = Constants.DefaultPath + file;
 
-                if (File.Exists(filePath) && file[^4..].Equals(Constants.CFGFileExtension))
+                if (File.Exists(filePath) && file.CheckFileExtention(Constants.CFGFileExtension))
                 {
                     switch (fileType)
                     {

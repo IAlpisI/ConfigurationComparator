@@ -1,4 +1,4 @@
-﻿using ConfigurationComparator.ConfigurataionFacade;
+﻿using ConfigurationComparator.ConfigurataionService;
 using ConfigurationComparator.Logging;
 
 namespace ConfigurationComparator

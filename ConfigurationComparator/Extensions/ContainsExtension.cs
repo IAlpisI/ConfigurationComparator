@@ -7,7 +7,7 @@ namespace ConfigurationComparator.Extensions
     {
         public static bool TryToFindById(this IEnumerable<ConfigurationParameters> data, string id, out ConfigurationParameters val)
         {
-            val = null;
+            val = new ConfigurationParameters();
 
             foreach(var d in data)
             {
