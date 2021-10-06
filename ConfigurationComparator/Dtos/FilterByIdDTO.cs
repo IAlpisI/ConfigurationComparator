@@ -4,6 +4,6 @@
     {
         public string SourceFileName { get; set; }
         public string TargetFileName { get; set; }
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

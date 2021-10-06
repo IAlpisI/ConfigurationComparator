@@ -7,6 +7,6 @@ namespace ConfigurationComparatorAPI.Dtos
     {
         public string SourceFileName { get; set; }
         public string TargetFileName { get; set; }
-        public List<ComparatorParameters> ComparatorParameters { get; set; }
+        public IEnumerable<ComparatorParameters> ComparatorParameters { get; set; }
     }
 }

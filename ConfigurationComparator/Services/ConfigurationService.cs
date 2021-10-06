@@ -8,7 +8,6 @@ using ConfigurationComparator.Logging;
 using ConfigurationComparator.OperateFiles;
 using ConfigurationComparatorAPI.Dtos;
 using Microsoft.AspNetCore.Http;
-using System.IO;
 
 namespace ConfigurationComparator.ConfigurataionService
 {
@@ -44,17 +43,13 @@ namespace ConfigurationComparator.ConfigurataionService
             commandHandler.StartCommands(configuratorHandler.GetComparatorData());
         }
 
-        public static bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile, string extension)
+        public static bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile, string extension, string path)
         {
-            var sourceFileName = sourceFile.FileName;
-            var targetFileName = targetFile.FileName;
-            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), @"Upload");
-
-            if (sourceFileName.CheckFileExtention(extension) 
-                && targetFileName.CheckFileExtention(extension))
+            if (sourceFile.FileName.CheckFileExtention(extension) &&
+                targetFile.FileName.CheckFileExtention(extension))
             {
-                ConfigurationWriter.Write(sourceFile, directoryPath);
-                ConfigurationWriter.Write(targetFile, directoryPath);
+                ConfigurationWriter.Write(sourceFile, path);
+                ConfigurationWriter.Write(targetFile, path);
 
                 return true;
             }
@@ -62,14 +57,10 @@ namespace ConfigurationComparator.ConfigurataionService
             return false;
         }
 
-        public ComparatorResponseDTO GetResponse(IFormFile sourceFile, IFormFile targetFile)
+        public ComparatorResponseDTO GetResponse(IFormFile sourceFile, IFormFile targetFile, string path)
         {
-            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), @"Upload");
-            var sourceFilePath = Path.Combine(directoryPath, sourceFile.FileName);
-            var targetFilePath = Path.Combine(directoryPath, targetFile.FileName);
-
-            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourceFilePath));
-            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetFilePath));
+            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourceFile.FileName.GetCurrentPath(path)));
+            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetFile.FileName.GetCurrentPath(path)));
 
             configuratorHandler.Handle(sourceData, targetData);
 
@@ -77,6 +68,23 @@ namespace ConfigurationComparator.ConfigurataionService
                  SourceFileName = sourceFile.FileName,
                  TargetFileName = targetFile.FileName,
                  ComparatorParameters = configuratorHandler.GetComparatorData()
+            };
+        }
+
+        public ComparatorResponseDTO GetFilteredBy(FilterByIdDTO filterById, string path)
+        {
+            var sourceData = ConfiguratorReader.Read(filterById.SourceFileName.GetCurrentPath(path));
+            var targetData = ConfiguratorReader.Read(filterById.TargetFileName.GetCurrentPath(path));
+
+            configuratorHandler.Handle(sourceData, targetData);
+
+            var data = configuratorHandler.GetComparatorData().FilterById(filterById.Id);
+
+            return new ComparatorResponseDTO
+            {
+                SourceFileName = filterById.SourceFileName,
+                TargetFileName = filterById.TargetFileName,
+                ComparatorParameters = data,
             };
         }
 

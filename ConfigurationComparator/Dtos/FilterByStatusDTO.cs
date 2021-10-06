@@ -6,6 +6,6 @@ namespace ConfigurationComparator.Dtos
     {
         public string SourceFileName { get; set; }
         public string TargetFileName { get; set; }
-        public Status Status { get; set; }
+        public string Status { get; set; }
     }
 }
