@@ -1,9 +1,7 @@
 ﻿using ConfigurationComparator;
 using ConfigurationComparator.ConfigurataionService;
-using ConfigurationComparator.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace ConfigurationComparatorAPI.Controllers
 {
@@ -17,17 +15,15 @@ namespace ConfigurationComparatorAPI.Controllers
             _configurationService = new ConfigurationService();
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile source, IFormFile target)
+        public IActionResult Upload(IFormFile source, IFormFile target)
         {
 
-            var success = ConfigurationService.TryUploadFiles(source, target, Constants.CFGFileExtension);
+            var fileUpload = ConfigurationService.TryUploadFiles(source, target, Constants.CFGFileExtension);
 
-            if (success)
+            if (fileUpload)
             {
-
-                return Ok();
+                return Ok(_configurationService.GetResponse(source, target));
             }
 
             return BadRequest(new { message = "Invalid file extension" });

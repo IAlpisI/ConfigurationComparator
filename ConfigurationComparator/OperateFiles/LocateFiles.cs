@@ -11,8 +11,8 @@ namespace ConfigurationComparator.HandleFiles
         private string TargetFilePath { get; set; }
         private readonly IMessageWriter _messageWriter;
         private readonly IMessageReader _messageReader;
-        public string GetSourceFile => SourceFilePath;
-        public string GetTargetFile => TargetFilePath;
+        public string GetSourceFilePath => SourceFilePath;
+        public string GetTargetFilePath => TargetFilePath;
         public LocateFiles(IMessageWriter messageWriter, IMessageReader messageReader)
         {
             _messageWriter = messageWriter;
@@ -25,9 +25,9 @@ namespace ConfigurationComparator.HandleFiles
             {
                 _messageWriter.Write($"Write the {fileType} file name in the data folder");
                 var file = _messageReader.Read();
-                var filePath = Path.Combine(Constants.DefaultPath, file);
+                //var filePath = Path.Combine(Constants.DefaultPath, file);
 
-                if (!FileExists(fileType, extension, filePath, file))
+                if (!FileExists(fileType, extension, Constants.DefaultPath, file))
                 {
                     _messageWriter.Write("File not found");
                     break;
@@ -37,7 +37,7 @@ namespace ConfigurationComparator.HandleFiles
 
         public bool FileExists(FileType fileType, string extension, string filePath, string file)
         {
-            if (CheckFile(extension, filePath, file))
+            if (extension.CheckFile(filePath, file))
             {
                 switch (fileType)
                 {
@@ -55,7 +55,5 @@ namespace ConfigurationComparator.HandleFiles
             return false;
         }
 
-        public bool CheckFile(string extension, string filePath, string file) =>
-            File.Exists(filePath) && file.CheckFileExtention(extension);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ConfigurationComparator.Commands;
 using ConfigurationComparator.ConfigurationVisitor;
+using ConfigurationComparator.Dtos;
 using ConfigurationComparator.Enums;
 using ConfigurationComparator.Extensions;
 using ConfigurationComparator.HandleFiles;
@@ -25,6 +26,7 @@ namespace ConfigurationComparator.ConfigurataionService
 
         public ConfigurationService()
         {
+            configuratorHandler = new ConfiguratorHandler();
         }
 
         public void InitializeData()
@@ -32,8 +34,8 @@ namespace ConfigurationComparator.ConfigurataionService
             locateFiles.LookForFile(FileType.Target, Constants.CFGFileExtension);
             locateFiles.LookForFile(FileType.Source, Constants.CFGFileExtension);
 
-            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(locateFiles.GetSourceFile));
-            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(locateFiles.GetTargetFile));
+            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(locateFiles.GetSourceFilePath));
+            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(locateFiles.GetTargetFilePath));
 
             configuratorHandler.Handle(sourceData, targetData);
         }
@@ -42,7 +44,7 @@ namespace ConfigurationComparator.ConfigurataionService
             commandHandler.StartCommands(configuratorHandler.GetComparatorData());
         }
 
-        public bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile, string extension)
+        public static bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile, string extension)
         {
             var sourceFileName = sourceFile.FileName;
             var targetFileName = targetFile.FileName;
@@ -62,17 +64,25 @@ namespace ConfigurationComparator.ConfigurataionService
 
         public ComparatorResponseDTO GetResponse(IFormFile sourceFile, IFormFile targetFile)
         {
-            var response = new ComparatorResponseDTO();
+            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), @"Upload");
+            var sourceFilePath = Path.Combine(directoryPath, sourceFile.FileName);
+            var targetFilePath = Path.Combine(directoryPath, targetFile.FileName);
 
+            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourceFilePath));
+            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetFilePath));
 
-            return response;
+            configuratorHandler.Handle(sourceData, targetData);
+
+            return new ComparatorResponseDTO { 
+                 SourceFileName = sourceFile.FileName,
+                 TargetFileName = targetFile.FileName,
+                 ComparatorParameters = configuratorHandler.GetComparatorData()
+            };
         }
 
-        public bool FilesArePresent(IFormFile file, string extension)
+        public bool FilesArePresent(string source, string target, string extension, string path)
         {
-            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), @"Upload");
-
-            return locateFiles.CheckFile(extension, directoryPath, file.FileName);
+            return extension.CheckFile(path, source) && extension.CheckFile(path, target);
         }
     }
 }
