@@ -1,39 +1,37 @@
 ﻿using ConfigurationComparator;
-using ConfigurationComparator.ConfigurataionService;
 using ConfigurationComparator.Dtos;
+using ConfigurationComparator.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConfigurationComparatorAPI.Controllers
 {
     [ApiController]
-    [Route("[controller")]
+    [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
-        private readonly ConfigurationService _configurationService;
+        private readonly ConfigurationAPIService _configurationService;
         public ConfigurationController()
         {
-            _configurationService = new ConfigurationService();
+            _configurationService = new ConfigurationAPIService(Constants.APIDefaultPath, Constants.CFGFileExtension);
         }
 
-        [HttpPost]
-        public IActionResult FilterBydId(FilterByIdDTO filterById)
+        [HttpGet("FilterById")]
+        public IActionResult FilterBydId([FromQuery] FilterByIdDTO filterById)
         {
-            if (_configurationService.FilesArePresent(filterById.SourceFileName, filterById.TargetFileName,
-                Constants.CFGFileExtension, Constants.APIDefaultPath))
+            if (_configurationService.FilesArePresent(filterById.SourceFileName, filterById.TargetFileName))
             {
-                return Ok();
+                return Ok(_configurationService.GetFilteredById(filterById));
             }
 
             return NotFound(new { message = "File not found" });
         }
 
-        [HttpPost]
-        public IActionResult FilterByStatus(FilterByStatusDTO filterByStatus)
+        [HttpGet("FilterByStatus")]
+        public IActionResult FilterByStatus([FromQuery] FilterByStatusDTO filterByStatus)
         {
-            if (_configurationService.FilesArePresent(filterByStatus.SourceFileName, filterByStatus.TargetFileName,
-                Constants.CFGFileExtension, Constants.APIDefaultPath))
+            if (_configurationService.FilesArePresent(filterByStatus.SourceFileName, filterByStatus.TargetFileName))
             {
-                return Ok();
+                return Ok(_configurationService.GetFilteredByStatus(filterByStatus));
             }
 
             return NotFound(new { message = "File not found" });
