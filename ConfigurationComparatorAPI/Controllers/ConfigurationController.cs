@@ -1,5 +1,5 @@
 ﻿using ConfigurationComparatorAPI.Dtos;
-using ConfigurationComparatorAPI.Services;
+using ConfigurationComparatorAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConfigurationComparatorAPI.Controllers
@@ -9,16 +9,19 @@ namespace ConfigurationComparatorAPI.Controllers
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
-        private readonly ConfigurationService _configurationService;
-        public ConfigurationController()
+        private readonly IConfigurationService _configurationService;
+        private readonly IFileService _fileService;
+        public ConfigurationController(IConfigurationService configurationService,
+                                       IFileService fileService)
         {
-            _configurationService = new ConfigurationService(Constants.APIDefaultPath, Constants.CFGFileExtension);
+            _configurationService = configurationService;
+            _fileService = fileService;
         }
 
         [HttpGet("Filter")]
         public IActionResult FilterBydId([FromQuery] FilterDTO filter)
         {
-            if (_configurationService.ValidateFiles(filter.SourceFileName, filter.TargetFileName))
+            if (_fileService.ValidateFiles(filter.SourceFileName, filter.TargetFileName))
             {
                 return Ok(_configurationService.Filter(filter));
             }

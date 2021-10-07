@@ -1,4 +1,4 @@
-﻿using ConfigurationComparatorAPI.Services;
+﻿using ConfigurationComparatorAPI.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +9,13 @@ namespace ConfigurationComparatorAPI.Controllers
     [Route("[controller]")]
     public class FileController : ControllerBase
     {
-        private readonly ConfigurationService _configurationService;
-        public FileController()
+        private readonly IConfigurationService _configurationService;
+        private readonly IFileService _fileService;
+        public FileController(IConfigurationService configurationService,
+                              IFileService fileService)
         {
-            _configurationService = new ConfigurationService(Constants.APIDefaultPath, Constants.CFGFileExtension);
+            _configurationService = configurationService;
+            _fileService = fileService;
         }
 
         [HttpPost]
@@ -23,11 +26,11 @@ namespace ConfigurationComparatorAPI.Controllers
                 return BadRequest();
             }
 
-            var fileUpload = _configurationService.TryUploadFiles(source, target);
+            var fileUpload = _fileService.TryUploadFiles(source, target);
 
             if (fileUpload)
             {
-                return Ok(_configurationService.GetResponse(source.FileName, target.FileName));
+                return Ok(_configurationService.GetComparatorResponse(source.FileName, target.FileName));
             }
 
             return BadRequest(new { message = "Invalid file extension" });
