@@ -34,47 +34,26 @@ namespace ConfigurationComparator.Services
             return false;
         }
 
-        public ComparatorResponseDTO GetResponse(IFormFile sourceFile, IFormFile targetFile)
+        public ComparatorResponseDTO GetResponse(string source, string target)
         {
-            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourceFile.FileName.GetCurrentPath(Path)));
-            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetFile.FileName.GetCurrentPath(Path)));
+            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(source.GetCurrentPath(Path)));
+            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(target.GetCurrentPath(Path)));
 
             configuratorHandler.Handle(sourceData, targetData);
 
-            return new ComparatorResponseDTO
-            {
-                SourceFileName = sourceFile.FileName,
-                TargetFileName = targetFile.FileName,
-                ComparatorParameters = configuratorHandler.GetComparatorData()
-            };
+            var data = configuratorHandler.GetComparatorData();
+
+            return data.GetComparatorDTO(data, source, target);
         }
 
-        public ComparatorResponseDTO GetFilteredById(FilterByIdDTO filterById)
+        public ComparatorResponseDTO Filter(FilterDTO filter)
         {
-            HandleFiles(filterById.SourceFileName, filterById.TargetFileName);
+            HandleFiles(filter.SourceFileName, filter.TargetFileName);
 
-            var data = configuratorHandler.GetComparatorData().FilterById(filterById.Id);
+            var data = configuratorHandler.GetComparatorData();
+            var filteredData = data.Filter(filter.Statuses, filter.Id);
 
-            return new ComparatorResponseDTO
-            {
-                SourceFileName = filterById.SourceFileName,
-                TargetFileName = filterById.TargetFileName,
-                ComparatorParameters = data,
-            };
-        }
-
-        public ComparatorResponseDTO GetFilteredByStatus(FilterByStatusDTO filterByStatus)
-        {
-            HandleFiles(filterByStatus.SourceFileName, filterByStatus.TargetFileName);
-
-            var data = configuratorHandler.GetComparatorData().FilterByStatus(filterByStatus.Status);
-
-            return new ComparatorResponseDTO
-            {
-                SourceFileName = filterByStatus.SourceFileName,
-                TargetFileName = filterByStatus.TargetFileName,
-                ComparatorParameters = data,
-            };
+            return filteredData.GetComparatorDTO(data, filter.SourceFileName, filter.TargetFileName);
         }
 
         private void HandleFiles(string source, string target)

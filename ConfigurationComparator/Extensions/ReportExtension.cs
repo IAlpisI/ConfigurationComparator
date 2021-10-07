@@ -1,5 +1,5 @@
-﻿using ConfigurationComparator.Commands;
-using ConfigurationComparator.ConfigurationHandler;
+﻿using ConfigurationComparator.ConfigurationHandler;
+using ConfigurationComparator.Models;
 using System.Collections.Generic;
 using System.Linq;
 

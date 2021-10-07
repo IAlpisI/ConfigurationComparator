@@ -15,23 +15,12 @@ namespace ConfigurationComparatorAPI.Controllers
             _configurationService = new ConfigurationAPIService(Constants.APIDefaultPath, Constants.CFGFileExtension);
         }
 
-        [HttpGet("FilterById")]
-        public IActionResult FilterBydId([FromQuery] FilterByIdDTO filterById)
+        [HttpGet("Filter")]
+        public IActionResult FilterBydId([FromQuery] FilterDTO filter)
         {
-            if (_configurationService.FilesArePresent(filterById.SourceFileName, filterById.TargetFileName))
+            if (_configurationService.FilesArePresent(filter.SourceFileName, filter.TargetFileName))
             {
-                return Ok(_configurationService.GetFilteredById(filterById));
-            }
-
-            return NotFound(new { message = "File not found" });
-        }
-
-        [HttpGet("FilterByStatus")]
-        public IActionResult FilterByStatus([FromQuery] FilterByStatusDTO filterByStatus)
-        {
-            if (_configurationService.FilesArePresent(filterByStatus.SourceFileName, filterByStatus.TargetFileName))
-            {
-                return Ok(_configurationService.GetFilteredByStatus(filterByStatus));
+                return Ok(_configurationService.Filter(filter));
             }
 
             return NotFound(new { message = "File not found" });

@@ -1,6 +1,6 @@
 ﻿using ConfigurationComparator.Enums;
 
-namespace ConfigurationComparator.Commands
+namespace ConfigurationComparator.Models
 {
     public class Report
     {

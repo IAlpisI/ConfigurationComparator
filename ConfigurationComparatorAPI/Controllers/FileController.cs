@@ -23,7 +23,7 @@ namespace ConfigurationComparatorAPI.Controllers
 
             if (fileUpload)
             {
-                return Ok(_configurationService.GetResponse(source, target));
+                return Ok(_configurationService.GetResponse(source.FileName, target.FileName));
             }
 
             return BadRequest(new { message = "Invalid file extension" });

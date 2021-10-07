@@ -35,6 +35,7 @@ namespace ConfigurationComparator.ConfigurationHandler
             return Status.Added;
         }
         public bool IsStatusAvailable() => int.TryParse(Source.Id, out _) || int.TryParse(Target.Id, out _);
+
         public override string ToString()
         {
             return $"{Source.Id} {Source.Value} {Target.Id} {Target.Value} {(IsStatusAvailable() ? GetStatus().ToString() : string.Empty)}";

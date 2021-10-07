@@ -25,19 +25,19 @@ namespace ConfigurationComparator.HandleFiles
             {
                 _messageWriter.Write($"Write the {fileType} file name in the data folder");
                 var file = _messageReader.Read();
-                //var filePath = Path.Combine(Constants.DefaultPath, file);
+                var filePath = Path.Combine(Constants.DefaultPath, file);
 
-                if (!FileExists(fileType, extension, Constants.DefaultPath, file))
+                if (FileExists(fileType, extension, filePath, file))
                 {
-                    _messageWriter.Write("File not found");
                     break;
                 }
+                _messageWriter.Write("File not found");
             }
         }
 
         public bool FileExists(FileType fileType, string extension, string filePath, string file)
         {
-            if (extension.CheckFile(filePath, file))
+            if (extension.CheckFile(Constants.DefaultPath, file))
             {
                 switch (fileType)
                 {
