@@ -1,11 +1,11 @@
-﻿using ConfigurationComparator;
-using ConfigurationComparator.Dtos;
-using ConfigurationComparator.Services;
+﻿using ConfigurationComparatorAPI.Dtos;
+using ConfigurationComparatorAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConfigurationComparatorAPI.Controllers
 {
     [ApiController]
+    [Produces("application/json")]
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {

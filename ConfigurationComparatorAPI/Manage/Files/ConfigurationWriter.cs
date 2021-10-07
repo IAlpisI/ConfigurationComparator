@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.IO;
 
-namespace ConfigurationComparator.OperateFiles
+namespace ConfigurationComparatorAPI.Manage.Files
 {
     public static class ConfigurationWriter
     {

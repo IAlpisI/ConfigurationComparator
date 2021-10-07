@@ -1,11 +1,11 @@
-﻿using ConfigurationComparator.ConfigurationVisitor;
-using ConfigurationComparator.Dtos;
+﻿using ConfigurationComparator;
+using ConfigurationComparator.ConfigurationVisitor;
 using ConfigurationComparator.Extensions;
-using ConfigurationComparator.OperateFiles;
 using ConfigurationComparatorAPI.Dtos;
+using ConfigurationComparatorAPI.Manage.Files;
 using Microsoft.AspNetCore.Http;
 
-namespace ConfigurationComparator.Services
+namespace ConfigurationComparatorAPI.Services
 {
     public class ConfigurationAPIService
     {
