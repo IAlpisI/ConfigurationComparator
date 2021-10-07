@@ -18,7 +18,7 @@ namespace ConfigurationComparatorAPI.Controllers
         [HttpGet("Filter")]
         public IActionResult FilterBydId([FromQuery] FilterDTO filter)
         {
-            if (_configurationService.FilesArePresent(filter.SourceFileName, filter.TargetFileName))
+            if (_configurationService.ValidateFiles(filter.SourceFileName, filter.TargetFileName))
             {
                 return Ok(_configurationService.Filter(filter));
             }

@@ -25,15 +25,14 @@ namespace ConfigurationComparatorAPI.Services
 
         public bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile)
         {
-            if (sourceFile.FileName.CheckFileExtention(Extension) &&
-                targetFile.FileName.CheckFileExtention(Extension))
+            if (sourceFile.FileName.FileExtentionMatch(Extension) &&
+                targetFile.FileName.FileExtentionMatch(Extension))
             {
                 ConfigurationWriter.Write(sourceFile, Path);
                 ConfigurationWriter.Write(targetFile, Path);
 
                 return true;
             }
-
             return false;
         }
 
@@ -48,8 +47,8 @@ namespace ConfigurationComparatorAPI.Services
 
         public ComparatorResponseDTO Filter(FilterDTO filter)
         {
-            var data = HandleFiles(FilePath(filter.SourceFileName),
-                                   FilePath(filter.TargetFileName));
+            var data = HandleFiles(GetFilePath(filter.SourceFileName),
+                                   GetFilePath(filter.TargetFileName));
 
             var filteredData = data.Filter(filter.Statuses, filter.Id);
 
@@ -66,11 +65,11 @@ namespace ConfigurationComparatorAPI.Services
             return configuratorHandler.GetComparatorData();
         }
 
-        private string FilePath(string file) =>
+        private string GetFilePath(string file) =>
             file.GetFileWithoutExtention(Extension)
                 .GetCurrentPath(Path);
 
-        public bool FilesArePresent(string source, string target) =>
+        public bool ValidateFiles(string source, string target) =>
             Extension.CheckFile(Path, source) && Extension.CheckFile(Path, target);
     }
 }
