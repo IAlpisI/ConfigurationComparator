@@ -1,20 +1,22 @@
 ﻿using ConfigurationComparator;
+using ConfigurationComparator.ConfigurationHandler;
 using ConfigurationComparator.ConfigurationVisitor;
 using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Dtos;
 using ConfigurationComparatorAPI.Extensions;
 using ConfigurationComparatorAPI.Manage.Files;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace ConfigurationComparatorAPI.Services
 {
-    public class ConfigurationAPIService
+    public class ConfigurationService
     {
         private string Path { get; set; }
         private string Extension { get; set; }
         private readonly ConfiguratorHandler configuratorHandler;
 
-        public ConfigurationAPIService(string path, string extension)
+        public ConfigurationService(string path, string extension)
         {
             Path = path;
             Extension= extension;
@@ -37,32 +39,31 @@ namespace ConfigurationComparatorAPI.Services
 
         public ComparatorResponseDTO GetResponse(string source, string target)
         {
-            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(source.GetCurrentPath(Path)));
-            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(target.GetCurrentPath(Path)));
 
-            configuratorHandler.Handle(sourceData, targetData);
-
-            var data = configuratorHandler.GetComparatorData();
+            var data = HandleFiles(ConfiguratorReader.Decompose(source.GetCurrentPath(Path)),
+                                   ConfiguratorReader.Decompose(target.GetCurrentPath(Path)));
 
             return data.GetComparatorDTO(data, source, target);
         }
 
         public ComparatorResponseDTO Filter(FilterDTO filter)
         {
-            HandleFiles(filter.SourceFileName, filter.TargetFileName);
+            var data = HandleFiles(FilePath(filter.SourceFileName),
+                                   FilePath(filter.TargetFileName));
 
-            var data = configuratorHandler.GetComparatorData();
             var filteredData = data.Filter(filter.Statuses, filter.Id);
 
             return filteredData.GetComparatorDTO(data, filter.SourceFileName, filter.TargetFileName);
         }
 
-        private void HandleFiles(string source, string target)
+        private List<ComparatorParameters> HandleFiles(string source, string target)
         {
-            var sourceData = ConfiguratorReader.Read(FilePath(source));
-            var targetData = ConfiguratorReader.Read(FilePath(target));
+            var sourceData = ConfiguratorReader.Read(source);
+            var targetData = ConfiguratorReader.Read(target);
 
             configuratorHandler.Handle(sourceData, targetData);
+
+            return configuratorHandler.GetComparatorData();
         }
 
         private string FilePath(string file) =>

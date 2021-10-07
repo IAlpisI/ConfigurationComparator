@@ -9,10 +9,10 @@ namespace ConfigurationComparatorAPI.Controllers
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
-        private readonly ConfigurationAPIService _configurationService;
+        private readonly ConfigurationService _configurationService;
         public ConfigurationController()
         {
-            _configurationService = new ConfigurationAPIService(Constants.APIDefaultPath, Constants.CFGFileExtension);
+            _configurationService = new ConfigurationService(Constants.APIDefaultPath, Constants.CFGFileExtension);
         }
 
         [HttpGet("Filter")]
