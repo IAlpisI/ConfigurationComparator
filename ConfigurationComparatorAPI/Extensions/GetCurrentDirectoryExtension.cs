@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ConfigurationComparator.Extensions
+namespace ConfigurationComparatorAPI.Extensions
 {
     public static class GetCurrentDirectoryExtension
     {

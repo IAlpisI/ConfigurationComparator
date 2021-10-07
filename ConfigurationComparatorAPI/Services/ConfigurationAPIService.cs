@@ -2,6 +2,7 @@
 using ConfigurationComparator.ConfigurationVisitor;
 using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Dtos;
+using ConfigurationComparatorAPI.Extensions;
 using ConfigurationComparatorAPI.Manage.Files;
 using Microsoft.AspNetCore.Http;
 
