@@ -1,5 +1,6 @@
 ﻿using ConfigurationComparator.Enums;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ConfigurationComparator.Dtos
 {

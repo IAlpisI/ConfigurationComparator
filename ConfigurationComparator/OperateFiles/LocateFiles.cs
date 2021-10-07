@@ -27,33 +27,23 @@ namespace ConfigurationComparator.HandleFiles
                 var file = _messageReader.Read();
                 var filePath = Path.Combine(Constants.DefaultPath, file);
 
-                if (FileExists(fileType, extension, filePath, file))
+                if (extension.CheckFile(Constants.DefaultPath, file))
                 {
+                    switch (fileType)
+                    {
+                        case FileType.Source:
+                            SourceFilePath = filePath;
+                            break;
+                        case FileType.Target:
+                            TargetFilePath = filePath;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 }
                 _messageWriter.Write("File not found");
             }
         }
-
-        public bool FileExists(FileType fileType, string extension, string filePath, string file)
-        {
-            if (extension.CheckFile(Constants.DefaultPath, file))
-            {
-                switch (fileType)
-                {
-                    case FileType.Source:
-                        SourceFilePath = filePath;
-                        break;
-                    case FileType.Target:
-                        TargetFilePath = filePath;
-                        break;
-                    default:
-                        break;
-                }
-                return true;
-            }
-            return false;
-        }
-
     }
 }
