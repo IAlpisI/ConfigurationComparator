@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ConfigurationComparatorAPI.Configuration
 {
-    public static class ConfigurationAPIService
+    public static class ConfigureAPIServices
     {
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
