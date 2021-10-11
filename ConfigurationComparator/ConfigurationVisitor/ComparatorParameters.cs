@@ -20,6 +20,10 @@ namespace ConfigurationComparator.ConfigurationHandler
             Target = target;
         }
 
+        /// <summary>
+        /// Get <see cref="Status"/> based on Id type
+        /// </summary>
+        /// <returns> The value of <see cref="Status"/></returns>
         public Status GetStatus()
         {
             if (Source.Id.Equals(Target.Id))
@@ -34,6 +38,11 @@ namespace ConfigurationComparator.ConfigurationHandler
 
             return Status.Added;
         }
+
+        /// <summary>
+        /// Check whenever <see cref="Status"/> is available for current value
+        /// </summary>
+        /// <returns>True if <see cref="Status"/> is available; otherwise, false</returns>
         public bool IsStatusAvailable() => int.TryParse(Source.Id, out _) || int.TryParse(Target.Id, out _);
 
         public override string ToString()

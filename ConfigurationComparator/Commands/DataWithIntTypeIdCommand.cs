@@ -10,9 +10,14 @@ namespace ConfigurationComparator.Commands
         public DataWithIntTypeIdCommand(IMessageWriter messageWriter):base(messageWriter)
         {
         }
-        public override void Execute(IEnumerable<ComparatorParameters> cp)
+
+        /// <summary>
+        /// Filter data with only string type ids
+        /// </summary>
+        /// <param name="comp">Comparator parameters</param>
+        public override void Execute(IEnumerable<ComparatorParameters> comp)
         {
-            var data = cp.Where(x => x.IsStatusAvailable());
+            var data = comp.Where(x => x.IsStatusAvailable());
 
             _messageWriter.WriteData(data);
         }

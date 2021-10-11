@@ -6,8 +6,8 @@ namespace ConfigurationComparatorAPI.Services
 {
     public class FileService : IFileService
     {
-        private string Path { get; set; } = Constants.APIDefaultPath;
-        private string Extension { get; set; } = Constants.CFGFileExtension;
+        private string Path { get; init; } = Constants.APIDefaultPath;
+        private string Extension { get; init; } = Constants.CFGFileExtension;
 
         public bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile)
         {

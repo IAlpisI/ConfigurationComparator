@@ -8,6 +8,11 @@ namespace ConfigurationComparator
 {
     public static class ConfiguratorReader
     {
+        /// <summary>
+        /// If file exists read the file
+        /// </summary>
+        /// <param name="path">Path of the file to read</param>
+        /// <returns>A Collection of <see cref="ComparatorParameters"/></returns>
         public static IEnumerable<ConfigurationParameters> Read(string path)
         {
             var data = new List<ConfigurationParameters>();
@@ -20,7 +25,12 @@ namespace ConfigurationComparator
             return data;
         }
 
-        public static void ParseData(string[] lines, ref List<ConfigurationParameters> data)
+        /// <summary>
+        /// Parse file lines based on split size
+        /// </summary>
+        /// <param name="lines">File lines to parse</param>
+        /// <param name="conf">Configuration parameters</param>
+        public static void ParseData(string[] lines, ref List<ConfigurationParameters> conf)
         {
             foreach (var line in lines)
             {
@@ -30,11 +40,16 @@ namespace ConfigurationComparator
                 {
                     var temp = p.Split(':');
                     var values = temp.Length == 2 ? (temp[0], temp[1]) : (temp[0], string.Empty);
-                    data.Add(new ConfigurationParameters(values.Item1, values.Item2));
+                    conf.Add(new ConfigurationParameters(values.Item1, values.Item2));
                 }
             }
         }
 
+        /// <summary>
+        /// Extract file with .CFG extension
+        /// </summary>
+        /// <param name="path">Path where file is located</param>
+        /// <returns>Path of the newly created file</returns>
         public static string Decompose(string path)
         {
             var newFileName = path[..^4];

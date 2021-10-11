@@ -12,6 +12,12 @@ namespace ConfigurationComparator.ConfigurationVisitor
         {
             comparatorParameters = new List<ComparatorParameters>();
         }
+
+        /// <summary>
+        /// Makes comparisons between source and target collections
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
         public void Handle(IEnumerable<ConfigurationParameters> source, IEnumerable<ConfigurationParameters> target)
         {
             var fileVisitor = new ConfigurationVisitor();

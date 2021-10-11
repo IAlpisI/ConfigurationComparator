@@ -24,15 +24,24 @@ namespace ConfigurationComparator.Commands
             };
         }
 
-        private void Handle(int command, IEnumerable<ComparatorParameters> cp)
+        /// <summary>
+        /// Look inside the <see cref="Dictionary{int, Command}"/> for a command and execute it
+        /// </summary>
+        /// <param name="command">Index of command</param>
+        /// <param name="comp">Comparator parameters</param>
+        private void Handle(int command, IEnumerable<ComparatorParameters> comp)
         {
             if(Commands.TryGetValue(command, out _))
             {
-                Commands[command].Execute(cp);
+                Commands[command].Execute(comp);
             }
         }
 
-        public void StartCommands(List<ComparatorParameters> param)
+        /// <summary>
+        /// Read user's input and set it as a command
+        /// </summary>
+        /// <param name="comp">Comparator parameters</param>
+        public void StartCommands(IEnumerable<ComparatorParameters> comp)
         {
             while (true)
             {
@@ -41,7 +50,7 @@ namespace ConfigurationComparator.Commands
                 var command = _messageReader.Read();
                 if(int.TryParse(command, out var nr))
                 {
-                    Handle(nr, param);
+                    Handle(nr, comp);
                 }
 
                 if(command.Equals("Q"))
@@ -51,6 +60,9 @@ namespace ConfigurationComparator.Commands
             }
         }
 
+        /// <summary>
+        /// Show names of the commands
+        /// </summary>
         private void DisplayCommands()
         {
             foreach (var c in Commands)

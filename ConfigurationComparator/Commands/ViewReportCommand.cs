@@ -11,9 +11,13 @@ namespace ConfigurationComparator.Commands
         {
         }
 
-        public override void Execute(IEnumerable<ComparatorParameters> cp)
+        /// <summary>
+        /// Get report based on collection of <see cref="ComparatorParameters"/>
+        /// </summary>
+        /// <param name="comp">Comparator parameters</param>
+        public override void Execute(IEnumerable<ComparatorParameters> comp)
         {
-            _messageWriter.WriteData(cp.GetReport());
+            _messageWriter.WriteData(comp.GetReport());
         }
     }
 }

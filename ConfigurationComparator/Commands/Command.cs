@@ -11,6 +11,6 @@ namespace ConfigurationComparator.Commands
         {
             _messageWriter = messageWriter;
         }
-        public abstract void Execute(IEnumerable<ComparatorParameters> cp);
+        public abstract void Execute(IEnumerable<ComparatorParameters> comp);
     }
 }

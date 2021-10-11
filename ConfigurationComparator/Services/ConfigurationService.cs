@@ -28,6 +28,7 @@ namespace ConfigurationComparator.ConfigurataionService
 
             configuratorHandler.Handle(sourceData, targetData);
         }
+
         public void InitializeCommands()
         {
             commandHandler.StartCommands(configuratorHandler.GetComparatorData());

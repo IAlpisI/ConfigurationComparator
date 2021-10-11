@@ -16,7 +16,11 @@ namespace ConfigurationComparator.Commands
             _messageReader = messageReader;
         }
 
-        public override void Execute(IEnumerable<ComparatorParameters> cp)
+        /// <summary>
+        /// User types id and selects filters that will be used to filter the collection.
+        /// </summary>
+        /// <param name="comp">Comparator parameters</param>
+        public override void Execute(IEnumerable<ComparatorParameters> comp)
         {
             List<Status> filter = new();
             int filterNumber = 4;
@@ -34,7 +38,7 @@ namespace ConfigurationComparator.Commands
                 }
             }
 
-            _messageWriter.WriteData(cp.Filter(filter, id));
+            _messageWriter.WriteData(comp.Filter(filter, id));
         }
     }
 }

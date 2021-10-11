@@ -19,6 +19,11 @@ namespace ConfigurationComparator.HandleFiles
             _messageReader = messageReader;
         }
 
+        /// <summary>
+        /// Get user's input and check whenever file type is correct
+        /// </summary>
+        /// <param name="fileType">File type to look for</param>
+        /// <param name="extension">Extension</param>
         public void LookForFile(FileType fileType, string extension)
         {
             while (true)
