@@ -20,8 +20,10 @@ namespace ConfigurationComparatorAPI.Services
 
         public ComparatorResponseDTO Filter(FilterDTO filter)
         {
-            FilterDtoMapper.MapFilterCommands(filter, apiManageConsole);
+            FilterDtoMapper.MapInitializeData(filter, apiManageConsole);
             configurationManager.InitializeData(Constants.APIDefaultPath);
+
+            FilterDtoMapper.MapFilterCommands(filter, apiManageConsole);
             configurationManager.InitializeCommands();
             var filteredData = apiManageConsole.GetComparatorParametersData();
 

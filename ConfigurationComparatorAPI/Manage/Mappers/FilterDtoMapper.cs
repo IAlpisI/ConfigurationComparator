@@ -7,10 +7,16 @@ namespace ConfigurationComparatorAPI.Manage.Mappers
 {
     public static class FilterDtoMapper
     {
-        public static void MapFilterCommands(FilterDTO filter, ApiEmulateConsole apiManageConsole)
+        public static void MapInitializeData(FilterDTO filter, ApiEmulateConsole apiManageConsole)
         {
+            apiManageConsole.ClearMessages();
             apiManageConsole.Write(filter.SourceFileName);
             apiManageConsole.Write(filter.TargetFileName);
+        }
+
+        public static void MapFilterCommands(FilterDTO filter, ApiEmulateConsole apiManageConsole)
+        {
+            apiManageConsole.ClearMessages();
             apiManageConsole.Write(((int)Commands.Filter).ToString());
             apiManageConsole.Write(filter.Id);
             apiManageConsole.Write(string.Join(string.Empty, filter.Statuses.Select(x => (int)x)));
@@ -18,6 +24,7 @@ namespace ConfigurationComparatorAPI.Manage.Mappers
 
         public static void MapDataWithStringTypeId(ApiEmulateConsole apiManageConsole)
         {
+            apiManageConsole.ClearMessages();
             apiManageConsole.Write(((int)Commands.DataWithStringTypeId).ToString());
         }
     }
