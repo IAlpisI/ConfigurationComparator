@@ -7,20 +7,20 @@ namespace ConfigurationComparator.Commands
     public class CommandHandler
     {
         private readonly Dictionary<int, Command> Commands;
-        private readonly IMessageWriter _messageWriter;
-        private readonly IMessageReader _messageReader;
+        private readonly IWriter _messageWriter;
+        private readonly IReader _messageReader;
 
-        public CommandHandler(IMessageWriter messageWriter, IMessageReader messageReader)
+        public CommandHandler(IWriter messageWriter, IReader messageReader)
         {
             _messageWriter = messageWriter;
             _messageReader = messageReader;
 
             Commands = new Dictionary<int, Command>
             {
-                { 1, new FilterCommand(messageWriter, messageReader) },
-                { 2, new ViewReportCommand(messageWriter) },
-                { 3, new DataWithStringTypeIdCommand(messageWriter) },
-                { 4, new DataWithIntTypeIdCommand(messageWriter) },
+                { 0, new FilterCommand(messageWriter, messageReader) },
+                { 1, new ViewReportCommand(messageWriter) },
+                { 2, new DataWithStringTypeIdCommand(messageWriter) },
+                { 3, new DataWithIntTypeIdCommand(messageWriter) },
             };
         }
 
@@ -31,7 +31,7 @@ namespace ConfigurationComparator.Commands
         /// <param name="comp">Comparator parameters</param>
         private void Handle(int command, IEnumerable<ComparatorParameters> comp)
         {
-            if(Commands.TryGetValue(command, out _))
+            if (Commands.TryGetValue(command, out _))
             {
                 Commands[command].Execute(comp);
             }
@@ -43,20 +43,12 @@ namespace ConfigurationComparator.Commands
         /// <param name="comp">Comparator parameters</param>
         public void StartCommands(IEnumerable<ComparatorParameters> comp)
         {
-            while (true)
+            DisplayCommands();
+
+            var command = _messageReader.Read();
+            if (int.TryParse(command, out var nr))
             {
-                DisplayCommands();
-
-                var command = _messageReader.Read();
-                if(int.TryParse(command, out var nr))
-                {
-                    Handle(nr, comp);
-                }
-
-                if(command.Equals("Q"))
-                {
-                    break;
-                }
+                Handle(nr, comp);
             }
         }
 
@@ -70,7 +62,6 @@ namespace ConfigurationComparator.Commands
                 var commandName = c.Value.ToString().Split('.')[^1];
                 _messageWriter.Write($"Press {c.Key} to activate {commandName}");
             }
-            _messageWriter.Write("Press Q to finish");
         }
     }
 }

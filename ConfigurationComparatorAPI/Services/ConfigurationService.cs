@@ -1,56 +1,35 @@
-﻿using ConfigurationComparator;
-using ConfigurationComparator.ConfigurationHandler;
-using ConfigurationComparator.ConfigurationVisitor;
+﻿using ConfigurationComparator.ConfigurataionService;
 using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Dtos;
-using ConfigurationComparatorAPI.Extensions;
 using ConfigurationComparatorAPI.Interfaces;
-using System.Collections.Generic;
+using ConfigurationComparatorAPI.Manage.Console;
+using ConfigurationComparatorAPI.Manage.Mappers;
 
 namespace ConfigurationComparatorAPI.Services
 {
     public class ConfigurationService : IConfigurationService
     {
-        private string Path { get; init; } = Constants.APIDefaultPath;
-        private string Extension { get; init; } = Constants.CFGFileExtension;
-        private readonly ConfiguratorHandler configuratorHandler;
+        private readonly ApiEmulateConsole apiManageConsole;
+        private readonly ConfigurationManager configurationManager;
 
         public ConfigurationService()
         {
-            configuratorHandler = new ConfiguratorHandler();
-        }
-
-        public ComparatorResponseDTO GetComparatorResponse(string source, string target)
-        {
-
-            var data = HandleFiles(ConfiguratorReader.Decompose(source.GetCurrentPath(Path)),
-                                   ConfiguratorReader.Decompose(target.GetCurrentPath(Path)));
-
-            return data.GetComparatorDTO(data, source, target);
+            apiManageConsole = new();
+            configurationManager = new ConfigurationManager(apiManageConsole, apiManageConsole);
         }
 
         public ComparatorResponseDTO Filter(FilterDTO filter)
         {
-            var data = HandleFiles(GetFilePath(filter.SourceFileName),
-                                   GetFilePath(filter.TargetFileName));
+            FilterDtoMapper.MapFilterCommands(filter, apiManageConsole);
+            configurationManager.InitializeData(Constants.APIDefaultPath);
+            configurationManager.InitializeCommands();
+            var filteredData = apiManageConsole.GetComparatorParametersData();
 
-            var filteredData = data.Filter(filter.Statuses, filter.Id);
+            FilterDtoMapper.MapDataWithStringTypeId(apiManageConsole);
+            configurationManager.InitializeCommands();
+            var strinTypeIdData = apiManageConsole.GetComparatorParametersData();
 
-            return filteredData.GetComparatorDTO(data, filter.SourceFileName, filter.TargetFileName);
+            return filteredData.GetComparatorDTO(strinTypeIdData, filter.SourceFileName, filter.TargetFileName);
         }
-
-        private List<ComparatorParameters> HandleFiles(string source, string target)
-        {
-            var sourceData = ConfiguratorReader.Read(source);
-            var targetData = ConfiguratorReader.Read(target);
-
-            configuratorHandler.Handle(sourceData, targetData);
-
-            return configuratorHandler.GetComparatorData();
-        }
-
-        private string GetFilePath(string file) =>
-            file.GetFileWithoutExtention(Extension)
-                .GetCurrentPath(Path);
     }
 }

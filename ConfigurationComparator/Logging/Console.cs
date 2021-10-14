@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using ConfigurationComparator.ConfigurationHandler;
+using ConfigurationComparator.Models;
+using System.Collections.Generic;
 using static System.Console;
 
 namespace ConfigurationComparator.Logging
 {
-    public class Console : IMessageWriter, IMessageReader
+    public class Console : IWriter, IReader
     {
 
         public string Read()
@@ -16,16 +18,20 @@ namespace ConfigurationComparator.Logging
             WriteLine(value);
         }
 
-        public void Write()
+        public void WriteData(IEnumerable<ComparatorParameters> comp)
         {
+            foreach (var c in comp)
+            {
+                WriteLine(c.ToString());
+            }
             WriteLine();
         }
 
-        public void WriteData<T>(IEnumerable<T> data)
+        public void WriteData(IEnumerable<Report> reports)
         {
-            foreach (var d in data)
+            foreach (var r in reports)
             {
-                WriteLine(d.ToString());
+                WriteLine(r.ToString());
             }
             WriteLine();
         }

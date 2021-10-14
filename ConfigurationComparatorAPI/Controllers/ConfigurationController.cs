@@ -19,7 +19,7 @@ namespace ConfigurationComparatorAPI.Controllers
         }
 
         [HttpGet("Filter")]
-        public IActionResult FilterBydId([FromQuery] FilterDTO filter)
+        public IActionResult Filter([FromQuery] FilterDTO filter)
         {
             if (_fileService.ValidateFiles(filter.SourceFileName, filter.TargetFileName))
             {

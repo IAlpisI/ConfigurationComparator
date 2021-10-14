@@ -1,6 +1,6 @@
 ﻿namespace ConfigurationComparator.Logging
 {
-    public interface IMessageReader
+    public interface IReader
     {
         public string Read();
     }

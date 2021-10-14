@@ -6,8 +6,8 @@ namespace ConfigurationComparator.Commands
 {
     public abstract class Command
     {
-        protected IMessageWriter _messageWriter;
-        public Command(IMessageWriter messageWriter)
+        protected IWriter _messageWriter;
+        public Command(IWriter messageWriter)
         {
             _messageWriter = messageWriter;
         }

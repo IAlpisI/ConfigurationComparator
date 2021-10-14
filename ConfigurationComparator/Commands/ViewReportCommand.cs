@@ -7,7 +7,7 @@ namespace ConfigurationComparator.Commands
 {
     public class ViewReportCommand : Command
     {
-        public ViewReportCommand(IMessageWriter messageWriter):base(messageWriter)
+        public ViewReportCommand(IWriter messageWriter):base(messageWriter)
         {
         }
 

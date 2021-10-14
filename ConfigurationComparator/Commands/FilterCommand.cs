@@ -8,10 +8,10 @@ namespace ConfigurationComparator.Commands
 {
     public class FilterCommand : Command
     {
-        private readonly IMessageReader _messageReader;
+        private readonly IReader _messageReader;
         private readonly List<Status> Statuses = new() { Status.Added, Status.Modified, Status.Removed, Status.Unchanged };
 
-        public FilterCommand(IMessageWriter messageWriter, IMessageReader messageReader) : base(messageWriter)
+        public FilterCommand(IWriter messageWriter, IReader messageReader) : base(messageWriter)
         {
             _messageReader = messageReader;
         }

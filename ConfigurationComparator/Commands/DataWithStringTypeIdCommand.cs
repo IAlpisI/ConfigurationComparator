@@ -7,7 +7,7 @@ namespace ConfigurationComparator.Commands
 {
     public class DataWithStringTypeIdCommand : Command
     {
-        public DataWithStringTypeIdCommand(IMessageWriter messageWriter) :base(messageWriter)
+        public DataWithStringTypeIdCommand(IWriter messageWriter) :base(messageWriter)
         {
         }
 

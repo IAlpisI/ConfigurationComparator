@@ -9,11 +9,11 @@ namespace ConfigurationComparator.HandleFiles
     {
         private string SourceFilePath { get; set; }
         private string TargetFilePath { get; set; }
-        private readonly IMessageWriter _messageWriter;
-        private readonly IMessageReader _messageReader;
+        private readonly IWriter _messageWriter;
+        private readonly IReader _messageReader;
         public string GetSourceFilePath => SourceFilePath;
         public string GetTargetFilePath => TargetFilePath;
-        public LocateFiles(IMessageWriter messageWriter, IMessageReader messageReader)
+        public LocateFiles(IWriter messageWriter, IReader messageReader)
         {
             _messageWriter = messageWriter;
             _messageReader = messageReader;
@@ -23,16 +23,16 @@ namespace ConfigurationComparator.HandleFiles
         /// Get user's input and check whenever file type is correct
         /// </summary>
         /// <param name="fileType">File type to look for</param>
-        /// <param name="extension">Extension</param>
-        public void LookForFile(FileType fileType, string extension)
+        /// <param name="path">File path</param>
+        public void LookForFile(FileType fileType, string path)
         {
             while (true)
             {
                 _messageWriter.Write($"Write the {fileType} file name in the data folder");
                 var file = _messageReader.Read();
-                var filePath = Path.Combine(Constants.DefaultPath, file);
+                var filePath = Path.Combine(path, file);
 
-                if (extension.CheckFile(Constants.DefaultPath, file))
+                if (Constants.CFGFileExtension.CheckFile(path, file))
                 {
                     switch (fileType)
                     {

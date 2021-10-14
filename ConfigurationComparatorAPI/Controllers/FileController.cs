@@ -9,12 +9,9 @@ namespace ConfigurationComparatorAPI.Controllers
     [Route("[controller]")]
     public class FileController : ControllerBase
     {
-        private readonly IConfigurationService _configurationService;
         private readonly IFileService _fileService;
-        public FileController(IConfigurationService configurationService,
-                              IFileService fileService)
+        public FileController(IFileService fileService)
         {
-            _configurationService = configurationService;
             _fileService = fileService;
         }
 
@@ -30,7 +27,7 @@ namespace ConfigurationComparatorAPI.Controllers
 
             if (fileUpload)
             {
-                return Ok(_configurationService.GetComparatorResponse(source.FileName, target.FileName));
+                return Ok();
             }
 
             return BadRequest(new { message = "Invalid file extension" });

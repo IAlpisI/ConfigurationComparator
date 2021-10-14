@@ -8,9 +8,9 @@ namespace ConfigurationComparator
         static void Main(string[] args)
         {
             var console = new Console();
-            var service = new ConfigurationService(console, console);
+            var service = new ConfigurationManager(console, console);
 
-            service.InitializeData();
+            service.InitializeData(Constants.DefaultPath);
             service.InitializeCommands();
         }
     }
