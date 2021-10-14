@@ -8,24 +8,27 @@ namespace ConfigurationComparatorAPI.Manage.Console
 {
     public class ApiEmulateConsole : IWriter, IReader
     {
-        private readonly Queue<string> messages = new();
+        private readonly Queue<string> CommandMessages;
+        private readonly Queue<string> WriteMessages;
         private IEnumerable<ComparatorParameters> Comp {get;set;}
         private IEnumerable<Report> Reports { get; set; }
 
-        public IEnumerable<ComparatorParameters> GetComparatorParametersData()
-        {
-            messages.Clear();
+        public IEnumerable<ComparatorParameters> GetComparatorParametersData() => Comp;
 
-            return Comp;
+        public ApiEmulateConsole()
+        {
+            CommandMessages = new();
+            WriteMessages = new();
         }
+
         public string Read()
         {
-            return messages.Dequeue();
+            return CommandMessages.Dequeue();
         }
 
         public void Write(string value)
         {
-            messages.Enqueue(value);
+            WriteMessages.Enqueue(value);
         }
 
         public void WriteData(IEnumerable<ComparatorParameters> comp)
@@ -36,6 +39,11 @@ namespace ConfigurationComparatorAPI.Manage.Console
         public void WriteData(IEnumerable<Report> reports)
         {
             Reports = reports.ToList();
+        }
+
+        public void AddCommand(string command)
+        {
+            CommandMessages.Enqueue(command);
         }
     }
 }

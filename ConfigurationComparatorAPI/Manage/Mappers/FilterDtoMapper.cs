@@ -9,23 +9,20 @@ namespace ConfigurationComparatorAPI.Manage.Mappers
     {
         public static void MapInitializeData(FilterDTO filter, ApiEmulateConsole apiManageConsole)
         {
-            apiManageConsole.ClearMessages();
-            apiManageConsole.Write(filter.SourceFileName);
-            apiManageConsole.Write(filter.TargetFileName);
+            apiManageConsole.AddCommand(filter.SourceFileName);
+            apiManageConsole.AddCommand(filter.TargetFileName);
         }
 
         public static void MapFilterCommands(FilterDTO filter, ApiEmulateConsole apiManageConsole)
         {
-            apiManageConsole.ClearMessages();
-            apiManageConsole.Write(((int)Commands.Filter).ToString());
-            apiManageConsole.Write(filter.Id);
-            apiManageConsole.Write(string.Join(string.Empty, filter.Statuses.Select(x => (int)x)));
+            apiManageConsole.AddCommand(((int)Commands.Filter).ToString());
+            apiManageConsole.AddCommand(filter.Id);
+            apiManageConsole.AddCommand(string.Join(string.Empty, filter.Statuses.Select(x => (int)x)));
         }
 
         public static void MapDataWithStringTypeId(ApiEmulateConsole apiManageConsole)
         {
-            apiManageConsole.ClearMessages();
-            apiManageConsole.Write(((int)Commands.DataWithStringTypeId).ToString());
+            apiManageConsole.AddCommand(((int)Commands.DataWithStringTypeId).ToString());
         }
     }
 }
