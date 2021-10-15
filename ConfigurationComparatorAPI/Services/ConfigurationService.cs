@@ -1,9 +1,12 @@
 ﻿using ConfigurationComparator.ConfigurataionService;
+using ConfigurationComparator.ConfigurationHandler;
 using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Dtos;
 using ConfigurationComparatorAPI.Interfaces;
 using ConfigurationComparatorAPI.Manage.Console;
 using ConfigurationComparatorAPI.Manage.Mappers;
+using ConfigurationComparatorAPI.Models;
+using System.Collections.Generic;
 
 namespace ConfigurationComparatorAPI.Services
 {
@@ -18,20 +21,26 @@ namespace ConfigurationComparatorAPI.Services
             configurationManager = new ConfigurationManager(apiManageConsole, apiManageConsole);
         }
 
-        public ComparatorResponseDTO Filter(FilterDTO filter)
+        public ComparatorResponseDTO Filtered(FilterDTO filter, ConfigurationFiles confFiles)
         {
-            FilterDtoMapper.MapInitializeData(filter, apiManageConsole);
-            configurationManager.InitializeData(Constants.APIDefaultPath);
-
             FilterDtoMapper.MapFilterCommands(filter, apiManageConsole);
             configurationManager.InitializeCommands();
             var filteredData = apiManageConsole.GetComparatorParametersData();
 
+            return filteredData.GetComparatorDTO(GetStringTypeIDs(), confFiles.Source, confFiles.Target);
+        }
+
+        public IEnumerable<ComparatorParameters> GetStringTypeIDs()
+        {
             FilterDtoMapper.MapDataWithStringTypeId(apiManageConsole);
             configurationManager.InitializeCommands();
-            var strinTypeIdData = apiManageConsole.GetComparatorParametersData();
+            return apiManageConsole.GetComparatorParametersData();
+        }
 
-            return filteredData.GetComparatorDTO(strinTypeIdData, filter.SourceFileName, filter.TargetFileName);
+        public void InitializeData(ConfigurationFiles confFiles)
+        {
+            FilterDtoMapper.MapInitializeData(confFiles, apiManageConsole);
+            configurationManager.InitializeData(Constants.APIDefaultPath);
         }
     }
 }

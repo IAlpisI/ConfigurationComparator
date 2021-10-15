@@ -1,16 +1,17 @@
 ﻿using ConfigurationComparatorAPI.Dtos;
 using ConfigurationComparatorAPI.Enums;
 using ConfigurationComparatorAPI.Manage.Console;
+using ConfigurationComparatorAPI.Models;
 using System.Linq;
 
 namespace ConfigurationComparatorAPI.Manage.Mappers
 {
     public static class FilterDtoMapper
     {
-        public static void MapInitializeData(FilterDTO filter, ApiEmulateConsole apiManageConsole)
+        public static void MapInitializeData(ConfigurationFiles confFies, ApiEmulateConsole apiManageConsole)
         {
-            apiManageConsole.AddCommand(filter.SourceFileName);
-            apiManageConsole.AddCommand(filter.TargetFileName);
+            apiManageConsole.AddCommand(confFies.Source);
+            apiManageConsole.AddCommand(confFies.Target);
         }
 
         public static void MapFilterCommands(FilterDTO filter, ApiEmulateConsole apiManageConsole)

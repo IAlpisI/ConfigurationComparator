@@ -1,4 +1,6 @@
 ﻿using ConfigurationComparatorAPI.Interfaces;
+using ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile;
+using ConfigurationComparatorAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +12,12 @@ namespace ConfigurationComparatorAPI.Controllers
     public class FileController : ControllerBase
     {
         private readonly IFileService _fileService;
-        public FileController(IFileService fileService)
+        private readonly IConfFileCache _fileCahche;
+        public FileController(IFileService fileService,
+                              IConfFileCache fileCache)
         {
             _fileService = fileService;
+            _fileCahche = fileCache;
         }
 
         [HttpPost]
@@ -27,6 +32,12 @@ namespace ConfigurationComparatorAPI.Controllers
 
             if (fileUpload)
             {
+                _fileCahche.Add(new ConfigurationFiles
+                {
+                     Source = source.FileName,
+                     Target = target.FileName
+                });
+
                 return Ok();
             }
 

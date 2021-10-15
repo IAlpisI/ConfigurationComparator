@@ -11,9 +11,10 @@ namespace ConfigurationComparatorAPI.Manage.Console
         private readonly Queue<string> CommandMessages;
         private readonly Queue<string> WriteMessages;
         private IEnumerable<ComparatorParameters> Comp {get;set;}
-        private IEnumerable<Report> Reports { get; set; }
+        private IEnumerable<Report> Report { get; set; }
 
         public IEnumerable<ComparatorParameters> GetComparatorParametersData() => Comp;
+        public IEnumerable<Report> GetReport() => Report;
 
         public ApiEmulateConsole()
         {
@@ -38,7 +39,7 @@ namespace ConfigurationComparatorAPI.Manage.Console
 
         public void WriteData(IEnumerable<Report> reports)
         {
-            Reports = reports.ToList();
+            Report = reports.ToList();
         }
 
         public void AddCommand(string command)

@@ -1,7 +1,9 @@
 ﻿using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Interfaces;
 using ConfigurationComparatorAPI.Manage.Files;
+using ConfigurationComparatorAPI.Models;
 using Microsoft.AspNetCore.Http;
+
 namespace ConfigurationComparatorAPI.Services
 {
     public class FileService : IFileService
@@ -22,7 +24,8 @@ namespace ConfigurationComparatorAPI.Services
                 return false;
         }
 
-        public bool ValidateFiles(string source, string target) =>
-            Extension.CheckFile(Path, source) && Extension.CheckFile(Path, target);
+        public bool ValidateFiles(ConfigurationFiles confFiles) =>
+            Extension.CheckFile(Path, confFiles.Source) &&
+            Extension.CheckFile(Path, confFiles.Target);
     }
 }

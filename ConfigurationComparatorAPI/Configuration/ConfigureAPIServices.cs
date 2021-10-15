@@ -1,4 +1,5 @@
 ﻿using ConfigurationComparatorAPI.Interfaces;
+using ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile;
 using ConfigurationComparatorAPI.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace ConfigurationComparatorAPI.Configuration
         {
             services.AddScoped<IConfigurationService, ConfigurationService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddSingleton<IConfFileCache, ConfFileCache>();
 
             return services;
         }
