@@ -52,12 +52,17 @@ namespace ConfigurationComparator
         /// <returns>Path of the newly created file</returns>
         public static string Decompose(string path)
         {
-            var newFileName = path[..^4];
+            string newFileName = string.Empty;
 
-            using FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            using FileStream outputStream = new(newFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
-            gzip.CopyTo(outputStream);
+            if (File.Exists(path))
+            {
+                newFileName = path[..^4];
+
+                using FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using FileStream outputStream = new(newFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
+                gzip.CopyTo(outputStream);
+            }
 
             return newFileName;
         }

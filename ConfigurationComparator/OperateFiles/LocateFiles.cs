@@ -7,12 +7,8 @@ namespace ConfigurationComparator.HandleFiles
 {
     public class LocateFiles
     {
-        private string SourceFilePath { get; set; }
-        private string TargetFilePath { get; set; }
         private readonly IWriter _messageWriter;
         private readonly IReader _messageReader;
-        public string GetSourceFilePath => SourceFilePath;
-        public string GetTargetFilePath => TargetFilePath;
         public LocateFiles(IWriter messageWriter, IReader messageReader)
         {
             _messageWriter = messageWriter;
@@ -22,33 +18,23 @@ namespace ConfigurationComparator.HandleFiles
         /// <summary>
         /// Get user's input and check whenever file type is correct
         /// </summary>
-        /// <param name="fileType">File type to look for</param>
         /// <param name="path">File path</param>
-        public void LookForFile(FileType fileType, string path)
+        /// <param name="fileType">File type</param>
+        public string LookForFile(string path, FileType fileType)
         {
-            while (true)
-            {
-                _messageWriter.Write($"Write the {fileType} file name in the data folder");
-                var file = _messageReader.Read();
-                var filePath = Path.Combine(path, file);
+            _messageWriter.Write($"Write the {fileType} file name in the data folder");
+            var file = _messageReader.Read();
+            var filePath = Path.Combine(path, file);
+            var isFilePresent = Constants.CFGFileExtension.CheckFile(path, file);
 
-                if (Constants.CFGFileExtension.CheckFile(path, file))
-                {
-                    switch (fileType)
-                    {
-                        case FileType.Source:
-                            SourceFilePath = filePath;
-                            break;
-                        case FileType.Target:
-                            TargetFilePath = filePath;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                _messageWriter.Write("File not found");
+            if (isFilePresent)
+            {
+                return filePath;
             }
+
+            _messageWriter.Write("File not found");
+
+            return string.Empty;
         }
     }
 }

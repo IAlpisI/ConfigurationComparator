@@ -20,11 +20,11 @@ namespace ConfigurationComparator.ConfigurataionService
 
         public void InitializeData(string path)
         {
-            locateFiles.LookForFile(FileType.Source, path);
-            locateFiles.LookForFile(FileType.Target, path);
+            var sourcePath = locateFiles.LookForFile(path, FileType.Source);
+            var targetPath = locateFiles.LookForFile(path, FileType.Target);
 
-            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(locateFiles.GetSourceFilePath));
-            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(locateFiles.GetTargetFilePath));
+            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourcePath));
+            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetPath));
 
             configuratorHandler.Handle(sourceData, targetData);
         }
