@@ -5,7 +5,7 @@ namespace ConfigurationComparatorAPI.Interfaces
 {
     public interface IFileService
     {
-        bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile);
-        bool ValidateFiles(ConfigurationFiles confFiles);
+        public bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile);
+        public bool ValidateConfigurationFiles(ConfigurationFiles confFiles);
     }
 }

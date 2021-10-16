@@ -1,5 +1,4 @@
 ﻿using ConfigurationComparatorAPI.Dtos;
-using ConfigurationComparatorAPI.Enums;
 using ConfigurationComparatorAPI.Manage.Console;
 using ConfigurationComparatorAPI.Models;
 using System.Linq;
@@ -16,14 +15,14 @@ namespace ConfigurationComparatorAPI.Manage.Mappers
 
         public static void MapFilterCommands(FilterDTO filter, ApiEmulateConsole apiManageConsole)
         {
-            apiManageConsole.AddCommand(((int)Commands.Filter).ToString());
+            apiManageConsole.AddCommand(Commands.Filter);
             apiManageConsole.AddCommand(filter.Id);
             apiManageConsole.AddCommand(string.Join(string.Empty, filter.Statuses.Select(x => (int)x)));
         }
 
         public static void MapDataWithStringTypeId(ApiEmulateConsole apiManageConsole)
         {
-            apiManageConsole.AddCommand(((int)Commands.DataWithStringTypeId).ToString());
+            apiManageConsole.AddCommand(Commands.DataWithStringTypeId);
         }
     }
 }

@@ -25,15 +25,17 @@ namespace ConfigurationComparatorAPI.Services
         {
             FilterDtoMapper.MapFilterCommands(filter, apiManageConsole);
             configurationManager.InitializeCommands();
-            var filteredData = apiManageConsole.GetComparatorParametersData();
 
-            return filteredData.GetComparatorDTO(GetStringTypeIDs(), confFiles.Source, confFiles.Target);
+            return apiManageConsole
+                .GetComparatorParametersData()
+                .GetComparatorDTO(GetStringTypeIDs(), confFiles.Source, confFiles.Target);
         }
 
         public IEnumerable<ComparatorParameters> GetStringTypeIDs()
         {
             FilterDtoMapper.MapDataWithStringTypeId(apiManageConsole);
             configurationManager.InitializeCommands();
+
             return apiManageConsole.GetComparatorParametersData();
         }
 

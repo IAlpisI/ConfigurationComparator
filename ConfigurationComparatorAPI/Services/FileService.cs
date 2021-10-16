@@ -1,5 +1,6 @@
 ﻿using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Interfaces;
+using ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile;
 using ConfigurationComparatorAPI.Manage.Files;
 using ConfigurationComparatorAPI.Models;
 using Microsoft.AspNetCore.Http;
@@ -10,21 +11,33 @@ namespace ConfigurationComparatorAPI.Services
     {
         private string Path { get; init; } = Constants.APIDefaultPath;
         private string Extension { get; init; } = Constants.CFGFileExtension;
+        private readonly IConfFileCache _fileCahche;
 
-        public bool TryUploadFiles(IFormFile sourceFile, IFormFile targetFile)
+        public FileService(IConfFileCache fileCache)
         {
-            if (sourceFile.FileName.FileExtentionMatch(Extension) &&
-                targetFile.FileName.FileExtentionMatch(Extension))
-                {
-                    ConfigurationWriter.Write(sourceFile, Path);
-                    ConfigurationWriter.Write(targetFile, Path);
-
-                    return true;
-                }
-                return false;
+            _fileCahche = fileCache;
         }
 
-        public bool ValidateFiles(ConfigurationFiles confFiles) =>
+        public bool TryUploadFiles(IFormFile source, IFormFile target)
+        {
+            if (source.FileName.FileExtentionMatch(Extension) &&
+                target.FileName.FileExtentionMatch(Extension))
+            {
+                ConfigurationWriter.Write(source, Path);
+                ConfigurationWriter.Write(target, Path);
+
+                _fileCahche.Add(new ConfigurationFiles
+                {
+                    Source = source.FileName,
+                    Target = target.FileName
+                });
+
+                return true;
+            }
+            return false;
+        }
+
+        public bool ValidateConfigurationFiles(ConfigurationFiles confFiles) =>
             Extension.CheckFile(Path, confFiles.Source) &&
             Extension.CheckFile(Path, confFiles.Target);
     }

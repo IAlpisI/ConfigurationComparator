@@ -30,7 +30,7 @@ namespace ConfigurationComparatorAPI.Controllers
                 return NotFound(new { message = "Configuration files not set" });
             }
 
-            if (_fileService.ValidateFiles(confFiles))
+            if (_fileService.ValidateConfigurationFiles(confFiles))
             {
                 _configurationService.InitializeData(confFiles);
                 return Ok(_configurationService.Filtered(filter, confFiles));

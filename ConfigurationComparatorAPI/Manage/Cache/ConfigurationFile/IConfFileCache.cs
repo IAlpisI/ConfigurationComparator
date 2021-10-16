@@ -4,7 +4,7 @@ namespace ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile
 {
     public interface IConfFileCache
     {
-        void Add(ConfigurationFiles configurationFiles);
-        bool TryGetConfigurationFiles(out ConfigurationFiles files);
+        public void Add(ConfigurationFiles configurationFiles);
+        public bool TryGetConfigurationFiles(out ConfigurationFiles files);
     }
 }
