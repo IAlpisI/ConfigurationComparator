@@ -11,7 +11,7 @@ namespace ConfigurationComparatorAPI.Configuration
         {
             services.AddScoped<IConfigurationService, ConfigurationService>();
             services.AddScoped<IFileService, FileService>();
-            services.AddSingleton<IConfFileCache, ConfFileCache>();
+            services.AddSingleton<IConfParamCache, ConfFileCache>();
 
             return services;
         }

@@ -48,17 +48,18 @@ namespace ConfigurationComparator
         /// <summary>
         /// Extract file with .CFG extension
         /// </summary>
-        /// <param name="path">Path where file is located</param>
+        /// <param name="fileName">File name</param>
         /// <returns>Path of the newly created file</returns>
-        public static string Decompose(string path)
+        public static string Decompose(string fileName, string path)
         {
             string newFileName = string.Empty;
+            var filePath = Path.Combine(path, fileName);
 
-            if (File.Exists(path))
+            if (File.Exists(filePath))
             {
-                newFileName = path[..^4];
+                newFileName = filePath[..^4];
 
-                using FileStream inputStream = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using FileStream inputStream = new(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 using FileStream outputStream = new(newFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 using GZipStream gzip = new(inputStream, CompressionMode.Decompress);
                 gzip.CopyTo(outputStream);

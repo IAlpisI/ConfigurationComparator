@@ -5,7 +5,7 @@ using static System.Console;
 
 namespace ConfigurationComparator.Logging
 {
-    public class Console : IWriter, IReader
+    public class ConsoleApplication : IWriter, IReader
     {
 
         public string Read()

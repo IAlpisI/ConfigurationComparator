@@ -23,9 +23,9 @@ namespace ConfigurationComparatorAPI.Controllers
                 return BadRequest();
             }
 
-            var fileUpload = _fileService.TryUploadFiles(source, target);
-
-            return fileUpload ? Ok() : BadRequest(new { message = "Invalid file extension" });
+            return  _fileService.TryUploadFiles(source, target) ?
+                    Ok() :
+                    BadRequest(new { message = "Invalid file extension" });
         }
     }
 }

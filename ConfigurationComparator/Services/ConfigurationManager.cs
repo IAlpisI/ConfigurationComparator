@@ -3,6 +3,7 @@ using ConfigurationComparator.ConfigurationVisitor;
 using ConfigurationComparator.Enums;
 using ConfigurationComparator.HandleFiles;
 using ConfigurationComparator.Logging;
+using ConfigurationComparator.Cache.ConfigurationFile;
 
 namespace ConfigurationComparator.ConfigurataionService
 {
@@ -11,20 +12,31 @@ namespace ConfigurationComparator.ConfigurataionService
         private readonly CommandHandler commandHandler;
         private readonly LocateFiles locateFiles;
         private readonly ConfiguratorHandler configuratorHandler;
-        public ConfigurationManager(IWriter messageWriter, IReader messageReader)
+        private readonly IConfFileCache _confFileCache;
+        public ConfigurationManager(IWriter messageWriter, IReader messageReader, IConfFileCache confFileCache)
         {
             commandHandler = new CommandHandler(messageWriter, messageReader);
             locateFiles = new LocateFiles(messageWriter, messageReader);
             configuratorHandler = new ConfiguratorHandler();
+            _confFileCache = confFileCache;
         }
 
         public void InitializeData(string path)
         {
-            var sourcePath = locateFiles.LookForFile(path, FileType.Source);
-            var targetPath = locateFiles.LookForFile(path, FileType.Target);
+            var sourceFileName = locateFiles.LookForFile(path, FileType.Source);
+            var targetFileName = locateFiles.LookForFile(path, FileType.Target);
 
-            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourcePath));
-            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetPath));
+            if (!_confFileCache.TryGetConfigurationValue(sourceFileName, out var sourceData))
+            {
+                sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourceFileName, path));
+                _confFileCache.AddValue(sourceFileName, sourceData);
+            }
+
+            if(!_confFileCache.TryGetConfigurationValue(targetFileName, out var targetData))
+            {
+                targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetFileName, path));
+                _confFileCache.AddValue(targetFileName, targetData);
+            }
 
             configuratorHandler.Handle(sourceData, targetData);
         }

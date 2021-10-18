@@ -23,13 +23,12 @@ namespace ConfigurationComparator.HandleFiles
         public string LookForFile(string path, FileType fileType)
         {
             _messageWriter.Write($"Write the {fileType} file name in the data folder");
-            var file = _messageReader.Read();
-            var filePath = Path.Combine(path, file);
-            var isFilePresent = Constants.CFGFileExtension.CheckFile(path, file);
+            var fileName = _messageReader.Read();            
+            var isFilePresent = Constants.CFGFileExtension.CheckFile(path, fileName);
 
             if (isFilePresent)
             {
-                return filePath;
+                return fileName;
             }
 
             _messageWriter.Write("File not found");

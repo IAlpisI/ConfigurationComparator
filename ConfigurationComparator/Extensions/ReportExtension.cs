@@ -13,16 +13,9 @@ namespace ConfigurationComparator.Extensions
         /// </summary>
         /// <param name="comp">Comparator parameters</param>
         /// <returns></returns>
-        public static IEnumerable<Report> GetReport(this IEnumerable<ComparatorParameters> comp)
-        {
-            if (comp is null)
-            {
-                return new List<Report>();
-            }
-
-            return comp.Where(x => x.IsStatusAvailable())
+        public static IEnumerable<Report> GetReport(this IEnumerable<ComparatorParameters> comp) => 
+            comp.Where(x => x.IsStatusAvailable())
                 .GroupBy(x => x.GetStatus())
                 .Select(c => new Report(c.Key, c.Count()));
-        }
     }
 }

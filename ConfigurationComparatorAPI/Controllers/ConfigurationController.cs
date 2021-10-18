@@ -12,10 +12,10 @@ namespace ConfigurationComparatorAPI.Controllers
     {
         private readonly IConfigurationService _configurationService;
         private readonly IFileService _fileService;
-        private readonly IConfFileCache _fileCache;
+        private readonly IConfParamCache _fileCache;
         public ConfigurationController(IConfigurationService configurationService,
                                        IFileService fileService,
-                                       IConfFileCache fileCache)
+                                       IConfParamCache fileCache)
         {
             _configurationService = configurationService;
             _fileService = fileService;
@@ -25,7 +25,7 @@ namespace ConfigurationComparatorAPI.Controllers
         [HttpGet("Filter")]
         public IActionResult Filter([FromQuery] FilterDTO filter)
         {
-            if(!_fileCache.TryGetConfigurationFiles(out var confFiles))
+            if(!_fileCache.TryGetConfigurationParams(out var confFiles))
             {
                 return NotFound(new { message = "Configuration files not set" });
             }

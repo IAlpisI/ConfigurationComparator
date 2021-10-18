@@ -3,6 +3,7 @@ using ConfigurationComparator.ConfigurationHandler;
 using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Dtos;
 using ConfigurationComparatorAPI.Interfaces;
+using ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile;
 using ConfigurationComparatorAPI.Manage.Console;
 using ConfigurationComparatorAPI.Manage.Mappers;
 using ConfigurationComparatorAPI.Models;
@@ -14,11 +15,13 @@ namespace ConfigurationComparatorAPI.Services
     {
         private readonly ApiEmulateConsole apiManageConsole;
         private readonly ConfigurationManager configurationManager;
+        private readonly IConfParamCache _confParamCache;
 
-        public ConfigurationService()
+        public ConfigurationService(IConfParamCache confParamCache)
         {
+            _confParamCache = confParamCache;
             apiManageConsole = new();
-            configurationManager = new ConfigurationManager(apiManageConsole, apiManageConsole);
+            configurationManager = new ConfigurationManager(apiManageConsole, apiManageConsole, _confParamCache);
         }
 
         public ComparatorResponseDTO Filtered(FilterDTO filter, ConfigurationFiles confFiles)

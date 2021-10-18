@@ -14,16 +14,9 @@ namespace ConfigurationComparator.Extensions
         /// <param name="filters">Status list</param>
         /// <param name="Id">Id</param>
         /// <returns>Filtered collection of <see cref="ComparatorParameters"/></returns>
-        public static IEnumerable<ComparatorParameters> Filter(this IEnumerable<ComparatorParameters> comp, List<Status> filters, string Id)
-        {
-            if (filters is null || comp is null)
-            {
-                return new List<ComparatorParameters>();
-            }
-
-            return comp.Where(x => x.IsStatusAvailable() &&
-                    filters.Contains(x.GetStatus()) &&
-                    x.Source.Id.Contains(Id));
-        }
+        public static IEnumerable<ComparatorParameters> Filter(this IEnumerable<ComparatorParameters> comp, List<Status> filters, string Id) => 
+            comp.Where(x => x.IsStatusAvailable() &&
+                filters.Contains(x.GetStatus()) &&
+                x.Source.Id.Contains(Id));
     }
 }

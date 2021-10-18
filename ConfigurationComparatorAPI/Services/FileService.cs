@@ -11,9 +11,9 @@ namespace ConfigurationComparatorAPI.Services
     {
         private string Path { get; init; } = Constants.APIDefaultPath;
         private string Extension { get; init; } = Constants.CFGFileExtension;
-        private readonly IConfFileCache _fileCahche;
+        private readonly IConfParamCache _fileCahche;
 
-        public FileService(IConfFileCache fileCache)
+        public FileService(IConfParamCache fileCache)
         {
             _fileCahche = fileCache;
         }
@@ -26,7 +26,7 @@ namespace ConfigurationComparatorAPI.Services
                 ConfigurationWriter.Write(source, Path);
                 ConfigurationWriter.Write(target, Path);
 
-                _fileCahche.Add(new ConfigurationFiles
+                _fileCahche.AddParameters(new ConfigurationFiles
                 {
                     Source = source.FileName,
                     Target = target.FileName
