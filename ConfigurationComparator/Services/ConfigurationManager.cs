@@ -4,6 +4,7 @@ using ConfigurationComparator.Enums;
 using ConfigurationComparator.HandleFiles;
 using ConfigurationComparator.Logging;
 using ConfigurationComparator.Cache.ConfigurationFile;
+using System.Collections.Generic;
 
 namespace ConfigurationComparator.ConfigurataionService
 {
@@ -26,17 +27,8 @@ namespace ConfigurationComparator.ConfigurataionService
             var sourceFileName = locateFiles.LookForFile(path, FileType.Source);
             var targetFileName = locateFiles.LookForFile(path, FileType.Target);
 
-            if (!_confFileCache.TryGetConfigurationValue(sourceFileName, out var sourceData))
-            {
-                sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourceFileName, path));
-                _confFileCache.AddValue(sourceFileName, sourceData);
-            }
-
-            if(!_confFileCache.TryGetConfigurationValue(targetFileName, out var targetData))
-            {
-                targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetFileName, path));
-                _confFileCache.AddValue(targetFileName, targetData);
-            }
+            var sourceData = GetFileData(sourceFileName, path);
+            var targetData = GetFileData(targetFileName, path);
 
             configuratorHandler.Handle(sourceData, targetData);
         }
@@ -44,6 +36,17 @@ namespace ConfigurationComparator.ConfigurataionService
         public void InitializeCommands()
         {
             commandHandler.StartCommands(configuratorHandler.GetComparatorData());
+        }
+
+        private IEnumerable<ConfigurationParameters> GetFileData(string fileName, string path)
+        {
+            if (!_confFileCache.TryGetConfigurationValues(fileName, out var data))
+            {
+                data = ConfiguratorReader.Read(ConfiguratorReader.Decompose(fileName, path));
+                _confFileCache.AddConfigurationValues(fileName, data);
+            }
+
+            return data;
         }
     }
 }

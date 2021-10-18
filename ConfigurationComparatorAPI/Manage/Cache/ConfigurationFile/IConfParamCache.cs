@@ -5,7 +5,7 @@ namespace ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile
 {
     public interface IConfParamCache : IConfFileCache
     {
-        public void AddParameters(ConfigurationFiles configurationFiles);
-        public bool TryGetConfigurationParams(out ConfigurationFiles files);
+        public void AddConfigurationFileName(ConfigurationFiles configurationFiles);
+        public bool TryGetConfigurationFileName(out ConfigurationFiles files);
     }
 }

@@ -15,7 +15,7 @@ namespace ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile
             _memoryCache = memoryCache;
         }
 
-        public void AddParameters(ConfigurationFiles configurationFiles)
+        public void AddConfigurationFileName(ConfigurationFiles configurationFiles)
         {
             _memoryCache.Set(Key,
                 configurationFiles,
@@ -25,7 +25,7 @@ namespace ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile
                 }); ;
         }
 
-        public void AddValue(string fileName, IEnumerable<ConfigurationParameters> conf)
+        public void AddConfigurationValues(string fileName, IEnumerable<ConfigurationParameters> conf)
         {
             _memoryCache.Set(fileName,
                 conf,
@@ -35,10 +35,10 @@ namespace ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile
                 });
         }
 
-        public bool TryGetConfigurationParams(out ConfigurationFiles confFiles) =>
+        public bool TryGetConfigurationFileName(out ConfigurationFiles confFiles) =>
                 _memoryCache.TryGetValue(Key, out confFiles);
 
-        public bool TryGetConfigurationValue(string fileName, out IEnumerable<ConfigurationParameters> confFiles) =>
+        public bool TryGetConfigurationValues(string fileName, out IEnumerable<ConfigurationParameters> confFiles) =>
                 _memoryCache.TryGetValue(fileName, out confFiles);
     }
 }

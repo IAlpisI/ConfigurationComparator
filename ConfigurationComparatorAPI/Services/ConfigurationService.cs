@@ -15,13 +15,11 @@ namespace ConfigurationComparatorAPI.Services
     {
         private readonly ApiEmulateConsole apiManageConsole;
         private readonly ConfigurationManager configurationManager;
-        private readonly IConfParamCache _confParamCache;
 
         public ConfigurationService(IConfParamCache confParamCache)
         {
-            _confParamCache = confParamCache;
             apiManageConsole = new();
-            configurationManager = new ConfigurationManager(apiManageConsole, apiManageConsole, _confParamCache);
+            configurationManager = new ConfigurationManager(apiManageConsole, apiManageConsole, confParamCache);
         }
 
         public ComparatorResponseDTO Filtered(FilterDTO filter, ConfigurationFiles confFiles)

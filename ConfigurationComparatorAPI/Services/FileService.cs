@@ -26,7 +26,7 @@ namespace ConfigurationComparatorAPI.Services
                 ConfigurationWriter.Write(source, Path);
                 ConfigurationWriter.Write(target, Path);
 
-                _fileCahche.AddParameters(new ConfigurationFiles
+                _fileCahche.AddConfigurationFileName(new ConfigurationFiles
                 {
                     Source = source.FileName,
                     Target = target.FileName

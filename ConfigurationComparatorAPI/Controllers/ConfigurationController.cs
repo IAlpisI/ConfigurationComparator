@@ -25,7 +25,7 @@ namespace ConfigurationComparatorAPI.Controllers
         [HttpGet("Filter")]
         public IActionResult Filter([FromQuery] FilterDTO filter)
         {
-            if(!_fileCache.TryGetConfigurationParams(out var confFiles))
+            if(!_fileCache.TryGetConfigurationFileName(out var confFiles))
             {
                 return NotFound(new { message = "Configuration files not set" });
             }
