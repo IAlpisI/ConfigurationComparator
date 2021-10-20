@@ -3,7 +3,6 @@ using ConfigurationComparator.Logging;
 using ConfigurationComparator.Cache.ConfigurationFile;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 using System;
 
 namespace ConfigurationComparator

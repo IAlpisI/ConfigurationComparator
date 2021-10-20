@@ -27,8 +27,8 @@ namespace ConfigurationComparator.ConfigurataionService
             var sourceFileName = locateFiles.LookForFile(path, FileType.Source);
             var targetFileName = locateFiles.LookForFile(path, FileType.Target);
 
-            var sourceData = GetFileData(sourceFileName, path);
-            var targetData = GetFileData(targetFileName, path);
+            var sourceData = GetFileData(FileType.Source, sourceFileName, path);
+            var targetData = GetFileData(FileType.Target, targetFileName, path);
 
             configuratorHandler.Handle(sourceData, targetData);
         }
@@ -38,12 +38,12 @@ namespace ConfigurationComparator.ConfigurataionService
             commandHandler.StartCommands(configuratorHandler.GetComparatorData());
         }
 
-        private IEnumerable<ConfigurationParameters> GetFileData(string fileName, string path)
+        private IEnumerable<ConfigurationParameters> GetFileData(FileType fileType, string fileName, string path)
         {
-            if (!_confFileCache.TryGetConfigurationValues(fileName, out var data))
+            if (!_confFileCache.TryGetConfigurationValues(fileType, out var data))
             {
                 data = ConfiguratorReader.Read(ConfiguratorReader.Decompose(fileName, path));
-                _confFileCache.AddConfigurationValues(fileName, data);
+                _confFileCache.AddConfigurationValues(fileType, data);
             }
 
             return data;
