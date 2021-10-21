@@ -1,4 +1,5 @@
-﻿using ConfigurationComparator.Extensions;
+﻿using ConfigurationComparator.Cache;
+using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Interfaces;
 using ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile;
 using ConfigurationComparatorAPI.Manage.Files;
@@ -11,9 +12,9 @@ namespace ConfigurationComparatorAPI.Services
     {
         private string Path { get; init; } = Constants.APIDefaultPath;
         private string Extension { get; init; } = Constants.CFGFileExtension;
-        private readonly IConfParamCache _fileCahche;
+        private readonly IConfFileNameCache _fileCahche;
 
-        public FileService(IConfParamCache fileCache)
+        public FileService(IConfFileNameCache fileCache)
         {
             _fileCahche = fileCache;
         }
@@ -26,11 +27,14 @@ namespace ConfigurationComparatorAPI.Services
                 ConfigurationWriter.Write(source, Path);
                 ConfigurationWriter.Write(target, Path);
 
-                _fileCahche.AddConfigurationFileName(new ConfigurationFiles
+                _fileCahche.AddConfigurationFileName(CacheKeys.FileNames, new ConfigurationFiles
                 {
                     Source = source.FileName,
                     Target = target.FileName
                 });
+
+                _fileCahche.Remove(CacheKeys.Source);
+                _fileCahche.Remove(CacheKeys.Target);
 
                 return true;
             }

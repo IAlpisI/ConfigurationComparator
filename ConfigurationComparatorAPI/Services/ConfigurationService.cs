@@ -16,7 +16,7 @@ namespace ConfigurationComparatorAPI.Services
         private readonly ApiEmulateConsole apiManageConsole;
         private readonly ConfigurationManager configurationManager;
 
-        public ConfigurationService(IConfParamCache confParamCache)
+        public ConfigurationService(IConfFileNameCache confParamCache)
         {
             apiManageConsole = new();
             configurationManager = new ConfigurationManager(apiManageConsole, apiManageConsole, confParamCache);
