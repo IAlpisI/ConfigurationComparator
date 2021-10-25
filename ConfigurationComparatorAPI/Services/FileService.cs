@@ -1,6 +1,6 @@
-﻿using ConfigurationComparator.Cache;
-using ConfigurationComparator.Extensions;
+﻿using ConfigurationComparator.Extensions;
 using ConfigurationComparatorAPI.Interfaces;
+using ConfigurationComparatorAPI.Manage.Cache;
 using ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile;
 using ConfigurationComparatorAPI.Manage.Files;
 using ConfigurationComparatorAPI.Models;
@@ -10,24 +10,22 @@ namespace ConfigurationComparatorAPI.Services
 {
     public class FileService : IFileService
     {
-        private string Path { get; init; } = Constants.APIDefaultPath;
-        private string Extension { get; init; } = Constants.CFGFileExtension;
-        private readonly IConfFileNameCache _fileCahche;
+        private readonly IConfigurationFileCache _fileCahche;
 
-        public FileService(IConfFileNameCache fileCache)
+        public FileService(IConfigurationFileCache fileCache)
         {
             _fileCahche = fileCache;
         }
 
         public bool TryUploadFiles(IFormFile source, IFormFile target)
         {
-            if (source.FileName.FileExtentionMatch(Extension) &&
-                target.FileName.FileExtentionMatch(Extension))
+            if (source.FileName.FileExtentionMatch(Constants.CFGFileExtension) &&
+                target.FileName.FileExtentionMatch(Constants.CFGFileExtension))
             {
-                ConfigurationWriter.Write(source, Path);
-                ConfigurationWriter.Write(target, Path);
+                ConfigurationWriter.Write(source, Constants.APIDefaultPath);
+                ConfigurationWriter.Write(target, Constants.APIDefaultPath);
 
-                _fileCahche.AddConfigurationFileName(CacheKeys.FileNames, new ConfigurationFiles
+                _fileCahche.AddConfigurationFileNames(CacheKeys.FileNames, new ConfigurationFiles
                 {
                     Source = source.FileName,
                     Target = target.FileName
@@ -42,7 +40,7 @@ namespace ConfigurationComparatorAPI.Services
         }
 
         public bool ValidateConfigurationFiles(ConfigurationFiles confFiles) =>
-            Extension.CheckFile(Path, confFiles.Source) &&
-            Extension.CheckFile(Path, confFiles.Target);
+            Constants.CFGFileExtension.CheckFile(Constants.APIDefaultPath, confFiles.Source) &&
+            Constants.CFGFileExtension.CheckFile(Constants.APIDefaultPath, confFiles.Target);
     }
 }

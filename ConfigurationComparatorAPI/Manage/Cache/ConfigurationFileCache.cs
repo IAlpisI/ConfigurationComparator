@@ -6,22 +6,22 @@ using System.Collections.Generic;
 
 namespace ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile
 {
-    public class ConfFileCache : IConfFileNameCache
+    public class ConfigurationFileCache : IConfigurationFileCache
     {
         private const int Days = 1;
 
         private readonly IMemoryCache _memoryCache;
-        public ConfFileCache(IMemoryCache memoryCache)
+        public ConfigurationFileCache(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
         }
 
-        public void AddConfigurationFileName(string key, ConfigurationFiles configurationFiles)
+        public void AddConfigurationFileNames(string key, ConfigurationFiles configurationFiles)
         {
             _memoryCache.Set(key, configurationFiles, TimeSpan.FromDays(Days));
         }
 
-        public bool TryGetConfigurationFileName(string key, out ConfigurationFiles confFiles) =>
+        public bool TryGetConfigurationFileNames(string key, out ConfigurationFiles confFiles) =>
             _memoryCache.TryGetValue(key, out confFiles);
 
         public void Remove(string key)

@@ -1,6 +1,5 @@
 ﻿using ConfigurationComparator.Enums;
 using ConfigurationComparator.Logging;
-using System.IO;
 using ConfigurationComparator.Extensions;
 
 namespace ConfigurationComparator.HandleFiles

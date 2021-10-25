@@ -1,6 +1,6 @@
-﻿namespace ConfigurationComparator.Cache
+﻿namespace ConfigurationComparatorAPI.Manage.Cache
 {
-    public static class CacheKeys
+    public class CacheKeys
     {
         public static string Source => "Source";
         public static string Target => "Target";

@@ -1,6 +1,6 @@
-﻿using ConfigurationComparator.Cache;
-using ConfigurationComparatorAPI.Dtos;
+﻿using ConfigurationComparatorAPI.Dtos;
 using ConfigurationComparatorAPI.Interfaces;
+using ConfigurationComparatorAPI.Manage.Cache;
 using ConfigurationComparatorAPI.Manage.Cache.ConfigurationFile;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +13,10 @@ namespace ConfigurationComparatorAPI.Controllers
     {
         private readonly IConfigurationService _configurationService;
         private readonly IFileService _fileService;
-        private readonly IConfFileNameCache _fileCache;
+        private readonly IConfigurationFileCache _fileCache;
         public ConfigurationController(IConfigurationService configurationService,
                                        IFileService fileService,
-                                       IConfFileNameCache fileCache)
+                                       IConfigurationFileCache fileCache)
         {
             _configurationService = configurationService;
             _fileService = fileService;
@@ -26,7 +26,7 @@ namespace ConfigurationComparatorAPI.Controllers
         [HttpGet("Filter")]
         public IActionResult Filter([FromQuery] FilterDTO filter)
         {
-            if(!_fileCache.TryGetConfigurationFileName(CacheKeys.FileNames, out var confFiles))
+            if(!_fileCache.TryGetConfigurationFileNames(CacheKeys.FileNames, out var confFiles))
             {
                 return NotFound(new { message = "Configuration files not set" });
             }
@@ -34,7 +34,7 @@ namespace ConfigurationComparatorAPI.Controllers
             if (_fileService.ValidateConfigurationFiles(confFiles))
             {
                 _configurationService.InitializeData(confFiles);
-                return Ok(_configurationService.Filtered(filter, confFiles));
+                return Ok(_configurationService.GetFilteredData(filter, confFiles));
             }
 
             return NotFound(new { message = "File not found" });
