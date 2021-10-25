@@ -19,15 +19,13 @@ namespace ConfigurationComparator.ConfigurataionService
             configuratorHandler = new ConfiguratorHandler();
         }
 
-        public void InitializeData(string path)
+        public (IEnumerable<ConfigurationParameters> source, IEnumerable<ConfigurationParameters> target) InitializeData(string path)
         {
             var sourceFileName = locateFiles.LookForFile(path, FileType.Source);
             var targetFileName = locateFiles.LookForFile(path, FileType.Target);
 
-            var sourceData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourceFileName, path));
-            var targetData = ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetFileName, path));
-
-            SetConfigurationHandler(sourceData, targetData);
+            return (ConfiguratorReader.Read(ConfiguratorReader.Decompose(sourceFileName, path)),
+                    ConfiguratorReader.Read(ConfiguratorReader.Decompose(targetFileName, path)));
         }
 
         public void SetConfigurationHandler(IEnumerable<ConfigurationParameters> source, IEnumerable<ConfigurationParameters> target)

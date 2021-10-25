@@ -40,15 +40,16 @@ namespace ConfigurationComparatorAPI.Services
             var isSourcePresent = _configurationFileCache.TryGetConfigurationValues(CacheKeys.Source, out var sourceData);
             var isTargetPresent = _configurationFileCache.TryGetConfigurationValues(CacheKeys.Target, out var targetData);
 
-            if (isSourcePresent && isTargetPresent)
-            {
-                configurationManager.SetConfigurationHandler(sourceData, targetData);
-            }
-            else
+            if (!(isSourcePresent && isTargetPresent))
             {
                 FilterDtoMapper.MapInitializeData(confFiles, apiManageConsole);
-                configurationManager.InitializeData(Constants.APIDefaultPath);
+                (sourceData, targetData) = configurationManager.InitializeData(Constants.APIDefaultPath);
+
+                _configurationFileCache.AddConfigurationValues(CacheKeys.Source, sourceData);
+                _configurationFileCache.AddConfigurationValues(CacheKeys.Target, targetData);
             }
+
+            configurationManager.SetConfigurationHandler(sourceData, targetData);
         }
         private IEnumerable<ComparatorParameters> GetStringTypeIDs()
         {

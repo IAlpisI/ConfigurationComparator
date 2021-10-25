@@ -10,7 +10,8 @@ namespace ConfigurationComparator
             var console = new ConsoleApplication();
             var service = new ConfigurationManager(console, console);
 
-            service.InitializeData(Constants.DefaultPath);
+            var (source, target) = service.InitializeData(Constants.DefaultPath);
+            service.SetConfigurationHandler(source, target);
             service.InitializeCommands();
         }
     }
