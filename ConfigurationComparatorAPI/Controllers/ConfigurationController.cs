@@ -33,7 +33,6 @@ namespace ConfigurationComparatorAPI.Controllers
 
             if (_fileService.ValidateConfigurationFiles(confFiles))
             {
-                _configurationService.InitializeData(confFiles);
                 return Ok(_configurationService.GetFilteredData(filter, confFiles));
             }
 

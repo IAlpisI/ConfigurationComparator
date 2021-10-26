@@ -27,6 +27,8 @@ namespace ConfigurationComparatorAPI.Services
 
         public ComparatorResponseDTO GetFilteredData(FilterDTO filter, ConfigurationFiles confFiles)
         {
+            InitializeData(confFiles);
+
             FilterDtoMapper.MapFilterCommands(filter, apiManageConsole);
             configurationManager.InitializeCommands();
 
@@ -35,7 +37,7 @@ namespace ConfigurationComparatorAPI.Services
                 .GetComparatorDTO(GetStringTypeIDs(), confFiles.Source, confFiles.Target);
         }
 
-        public void InitializeData(ConfigurationFiles confFiles)
+        private void InitializeData(ConfigurationFiles confFiles)
         {
             var isSourcePresent = _configurationFileCache.TryGetConfigurationValues(CacheKeys.Source, out var sourceData);
             var isTargetPresent = _configurationFileCache.TryGetConfigurationValues(CacheKeys.Target, out var targetData);
